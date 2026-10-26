@@ -3,30 +3,23 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta
-      name="description"
-      content="Technical methods for the 2025 county arrest estimates, including agency inclusion, reporting corrections, imputation, validation, aggregation, and publication rules."
-    />
+    <meta name="description" content="Methods for the 2023–2025 average annual county arrest estimates." />
     <meta name="theme-color" content="#0a0c11" />
     <title>Methods · County Arrest Estimates</title>
-    <link rel="stylesheet" href="assets/styles.css?v=20261026-methods" />
+    <link rel="stylesheet" href="assets/styles.css?v=20261026-three-year" />
   </head>
   <body>
     <a class="skip-link" href="#main">Skip to content</a>
     <header class="site-header">
       <a class="brand" href="./#map" aria-label="County Arrest Estimates home">
         <span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i></span>
-        <span>
-          <strong>County Arrest Estimates</strong>
-          <small>United States · 2025</small>
-        </span>
+        <span><strong>County Arrest Estimates</strong><small>United States · 2023–2025 average annual</small></span>
       </a>
       <nav class="primary-nav" aria-label="Primary navigation">
-        <a href="./#map">Map</a>
-        <a href="./#ranking">Rankings</a>
+        <a href="./#map">Map</a><a href="./#ranking">Rankings</a>
         <a class="active" href="methods.html" aria-current="page">Methods</a>
       </nav>
-      <a class="method-button" href="data/county-metrics.csv?v=20261026-california" download>Download data</a>
+      <a class="method-button" href="data/county-metrics.csv?v=20261026-three-year" download>Download data</a>
     </header>
 
     <main class="methods-main" id="main">
@@ -34,672 +27,142 @@
         <div class="methods-hero-copy">
           <p class="eyebrow">Technical documentation</p>
           <h1>How the county estimates are built.</h1>
-          <p class="lede">
-            The estimates combine reported arrests, reviewed agency relationships, statistical
-            corrections, and alternative state data. This page explains the choices that turn
-            those inputs into comparable county measures—and where uncertainty remains.
-          </p>
+          <p class="lede">The release estimates an average year during 2023–2025. It combines reported arrests, within-year reporting corrections, calendar-year imputation, reviewed agency relationships, and approved Florida and California sources.</p>
         </div>
         <div class="methods-release" aria-label="Release summary">
-          <div><span>Estimate year</span><strong>2025</strong></div>
+          <div><span>Estimate period</span><strong>2023–2025</strong></div>
+          <div><span>Statistic</span><strong>Average annual</strong></div>
           <div><span>Independent LEAs</span><strong>14,573</strong></div>
+          <div><span>Population basis</span><strong>2025 fixed</strong></div>
         </div>
       </header>
 
       <div class="methods-layout">
         <nav class="methods-toc" aria-label="Methods sections">
           <span>On this page</span>
-          <a href="#overview">Overview</a>
-          <a href="#agencies">Agency universe</a>
-          <a href="#relationships">ORIs &amp; contracting</a>
-          <a href="#sources">Data sources</a>
-          <a href="#definitions">Arrest definitions</a>
-          <a href="#race">Race &amp; ethnicity</a>
-          <a href="#staffing">Officer counts</a>
-          <a href="#reporters">Reporter criteria</a>
-          <a href="#underreporting">Within-year correction</a>
-          <a href="#imputation">Translation &amp; imputation</a>
-          <a href="#validation">Validation</a>
-          <a href="#aggregation">County aggregation</a>
-          <a href="#publication">Publication &amp; stability</a>
-          <a href="#rates">Rates &amp; rankings</a>
+          <a href="#overview">Overview</a><a href="#roster">Roster &amp; geography</a>
+          <a href="#sources">Data sources</a><a href="#definitions">Arrest definitions</a>
+          <a href="#credibility">Agency-year credibility</a><a href="#within-year">Within-year correction</a>
+          <a href="#missing-years">Missing calendar years</a><a href="#fully-missing">Fully missing agencies</a>
+          <a href="#composition">Race &amp; ethnicity</a><a href="#alternatives">Florida &amp; California</a>
+          <a href="#publication">Publication &amp; stability</a><a href="#rates">Rates &amp; rankings</a>
           <a href="#limitations">Limitations</a>
         </nav>
 
         <article class="methods-article">
           <section class="methods-section" id="overview">
-            <p class="eyebrow">01 · Scope</p>
-            <h2>Overview</h2>
-            <p>
-              This site presents estimates of arrests made during calendar year 2025 by
-              general-purpose local police departments and sheriffs’ offices in the 50 states
-              and the District of Columbia. Estimates are constructed first for each independently
-              operating law-enforcement agency and then apportioned and aggregated to counties.
-            </p>
-            <p>
-              The objective is to produce comparable county estimates despite incomplete national
-              reporting, differences between federal reporting systems, partial-year submissions,
-              and local contracting arrangements. The values are statistical estimates rather than
-              audited administrative totals. They should be interpreted with the coverage and
-              stability indicators shown throughout the site.
-            </p>
-            <div class="methods-callout">
-              <p class="eyebrow">Central distinction</p>
-              <p>
-                An FBI reporting identifier is not always an independent police agency. The
-                analysis first reconstructs independent service providers, then evaluates their
-                reporting and estimates their arrests.
-              </p>
-            </div>
+            <p class="eyebrow">01 · Scope</p><h2>Average annual measures</h2>
+            <p>Every headline arrest count is the arithmetic mean of three complete calendar-year values: 2023, 2024, and 2025. Rates divide that average annual count by the fixed 2025 population denominator. They are not pooled three-year rates and are not three-year totals.</p>
+            <div class="methods-formula"><p>2023–2025 average annual arrests = (2023 estimate + 2024 estimate + 2025 estimate) ÷ 3</p></div>
+            <p>The outcome is a custodial arrest event, not a count of charges, convictions, jail admissions, or unique people. Values are statistical estimates and should be read with each county’s coverage, stability, source, and imputation notes.</p>
           </section>
 
-          <section class="methods-section" id="agencies">
-            <p class="eyebrow">02 · Analytical roster</p>
-            <h2>Law-enforcement agencies included</h2>
-            <p>
-              The current roster contains <strong>14,573 independent law-enforcement agencies</strong>.
-              Included agencies must be an independently operating general-purpose local police
-              department or county-equivalent sheriff’s office.
-            </p>
-            <div class="methods-table-wrap">
-              <table class="methods-table">
-                <thead><tr><th>Agency type</th><th class="numeric">Agencies</th></tr></thead>
-                <tbody>
-                  <tr><td>General-purpose local police departments</td><td class="numeric">11,573</td></tr>
-                  <tr><td>Sheriffs’ offices</td><td class="numeric">3,000</td></tr>
-                  <tr><td><strong>Total</strong></td><td class="numeric"><strong>14,573</strong></td></tr>
-                </tbody>
-              </table>
-            </div>
-            <p>
-              The roster excludes state police, federal agencies, campus and school police,
-              transit police, airport and port police, tribal agencies, corrections agencies,
-              and other special-purpose agencies. Agencies determined to be inactive, dissolved,
-              or no longer independently operating are also excluded.
-            </p>
-            <p>
-              Sheriffs’ offices remain included even though their responsibilities vary. Some
-              provide extensive patrol services; others devote more staff to courts, jails, civil
-              process, or specialized functions. That heterogeneity is considered when staffing
-              and arrests-per-officer values are evaluated.
-            </p>
-            <p>
-              Excluded agencies and the supporting evidence remain in the research database but
-              are marked so they cannot enter the active analytical views. The current exclusion
-              ledger includes 43 inactive agencies and 11 non-general-purpose agencies.
-            </p>
-
-            <h3>Final arrest-data pathways</h3>
-            <div class="methods-table-wrap">
-              <table class="methods-table">
-                <thead><tr><th>Final pathway</th><th class="numeric">Agencies</th></tr></thead>
-                <tbody>
-                  <tr><td>Credible NIBRS data</td><td class="numeric">10,363</td></tr>
-                  <tr><td>ASR/SRS data translated to the NIBRS definition</td><td class="numeric">897</td></tr>
-                  <tr><td>Florida alternative data translated to the NIBRS definition</td><td class="numeric">126</td></tr>
-                  <tr><td>No usable arrest report; model-based agency estimate</td><td class="numeric">3,187</td></tr>
-                  <tr><td><strong>Total</strong></td><td class="numeric"><strong>14,573</strong></td></tr>
-                </tbody>
-              </table>
-            </div>
-            <p class="methods-note">Pathway counts describe the current release and may change when source data or the reviewed roster are updated.</p>
-          </section>
-
-          <section class="methods-section" id="relationships">
-            <p class="eyebrow">03 · Agency identity</p>
-            <h2>Independent agencies, ORIs, and contracting</h2>
-            <p>
-              An FBI Originating Agency Identifier, or <strong>ORI</strong>, is a reporting
-              identifier—not necessarily an independently operating police agency. One agency may
-              report through multiple ORIs, and an ORI bearing a municipality’s name may remain
-              active after that municipality contracts with another department or sheriff.
-            </p>
-            <p>
-              The roster therefore uses the independent service provider rather than the raw ORI
-              as its unit of analysis. It links <strong>14,866 current reporting or service
-              ORIs</strong> to 14,573 independent agencies. Of those agencies, 114 have more than
-              one current ORI, accounting for 293 ORIs beyond their primary provider identifiers.
-            </p>
-            <div class="methods-table-wrap">
-              <table class="methods-table">
-                <thead><tr><th>Reviewed relationship</th><th class="numeric">Records</th></tr></thead>
-                <tbody>
-                  <tr><td>Contract service</td><td class="numeric">207</td></tr>
-                  <tr><td>Service transfer</td><td class="numeric">16</td></tr>
-                  <tr><td>Joint department</td><td class="numeric">10</td></tr>
-                  <tr><td>Shared service area</td><td class="numeric">4</td></tr>
-                  <tr><td>Shared department</td><td class="numeric">1</td></tr>
-                </tbody>
-              </table>
-            </div>
-            <p>
-              Relationships were identified from locally preserved research using government and
-              agency records, staffing surveys, state and local contracting information, and,
-              where necessary, local news reporting. Each decision and its rationale are retained
-              in the research database.
-            </p>
-            <p>For a contracted municipality or component reporting ORI:</p>
-            <ol>
-              <li>Its current ORI is attached to the actual service provider.</li>
-              <li>Arrest records from all attached ORIs are summed before reporter status or annual estimates are determined.</li>
-              <li>The former or component agency does not receive a separate imputed arrest total.</li>
-              <li>Its service geography remains attached to the provider so arrests can be apportioned to the correct counties.</li>
-              <li>Inactive ORIs are retained for provenance but excluded from current reporting views.</li>
-            </ol>
-
-            <h3>Preventing population double counting</h3>
-            <p>
-              If the provider’s Census geography already represents its complete service area,
-              nested member populations are not added again. If the provider serves distinct
-              noncounty jurisdictions not contained in its own geography, unique member
-              geographies are summed. Identical Census geography sets are counted only once.
-            </p>
+          <section class="methods-section" id="roster">
+            <p class="eyebrow">02 · Analytical frame</p><h2>Current agencies and geography are held fixed</h2>
+            <p>The analysis uses the reviewed 2025 roster of 14,573 independent general-purpose local police departments and sheriffs’ offices. That same roster, agency identity, service relationship, staffing value, jurisdiction population, covariates, and agency-to-county allocation are projected across all three years. The analysis does not attempt to reconstruct agencies opening, closing, merging, or becoming independent during 2023–2025.</p>
+            <p>FBI Originating Agency Identifiers are reporting identifiers, not always independent agencies. Current component ORIs and contracted jurisdictions are assigned to the reviewed service provider before monthly or annual reporting is assessed. Cross-county service areas are allocated using fixed 2025 population weights; the weights sum to one for each agency.</p>
+            <p>Population and race-specific denominators are the same 2025 analytical values used in the prior release, drawing on the 2020–2024 American Community Survey. No separate 2023 or 2024 population series is introduced.</p>
           </section>
 
           <section class="methods-section" id="sources">
-            <p class="eyebrow">04 · Inputs</p>
-            <h2>Data sources</h2>
-            <div class="methods-table-wrap">
-              <table class="methods-table">
-                <thead><tr><th>Source</th><th>Years</th><th>Use</th></tr></thead>
-                <tbody>
-                  <tr><td>FBI National Incident-Based Reporting System (NIBRS)</td><td>2025</td><td>Individual custodial arrests, offenses, race and ethnicity, and monthly reporting</td></tr>
-                  <tr><td>FBI Arrest Summary Reporting / Summary Reporting System (ASR/SRS)</td><td>2025</td><td>Agency arrest summaries and SRS-format counterparts for NIBRS training agencies</td></tr>
-                  <tr><td>FBI Crime Data Explorer agency and ORI records</td><td>Primarily 2024–2025</td><td>Initial agency universe, identifiers, and agency type</td></tr>
-                  <tr><td>FBI Law Enforcement Employees (LEE)</td><td>2020–2024</td><td>Full-time and part-time sworn staffing</td></tr>
-                  <tr><td>Census of State and Local Law Enforcement Agencies (CSLLEA)</td><td>2018</td><td>Agency existence, type, independence, and staffing cross-checks</td></tr>
-                  <tr><td>Law Enforcement Management and Administrative Statistics (LEMAS)</td><td>2020</td><td>Agency-status and staffing cross-checks</td></tr>
-                  <tr><td>Census Bureau Annual Survey of Public Employment and Payroll (ASPEP)</td><td>2022</td><td>Government-level police staffing and reported-versus-imputed status</td></tr>
-                  <tr><td>Targeted verified staffing records</td><td>2024–2025</td><td>A small number of reviewed staffing corrections, including Kentucky DOCJT and FBI employee-count records</td></tr>
-                  <tr><td>American Community Survey five-year estimates</td><td>2020–2024</td><td>Population, service areas, race and ethnicity, poverty, and density</td></tr>
-                  <tr><td>Census Gazetteer and place-within-county geography</td><td>2024</td><td>County geography and allocation of places that cross county lines</td></tr>
-                  <tr><td>Florida Criminal Justice Data Transparency (CJDT)</td><td>2025</td><td>Charge-level detention arrests used where national agency data are unusable</td></tr>
-                  <tr><td>California DOJ OpenJustice</td><td>2024</td><td>County arrest totals and composition for selected California counties</td></tr>
-                  <tr><td>Reviewed agency-status and service-arrangement records</td><td>Multiple</td><td>Contracting, consolidation, inactivity, parent-agency, and crosswalk decisions</td></tr>
-                </tbody>
-              </table>
-            </div>
-            <p>
-              The 2020–2024 ACS is a period estimate rather than a point-in-time 2025
-              population count. It is used because it provides a consistent national set of
-              county, place, place-within-county, and race-specific denominators.
-            </p>
+            <p class="eyebrow">03 · Inputs</p><h2>Arrest and supporting data</h2>
+            <div class="methods-table-wrap"><table class="methods-table">
+              <thead><tr><th>Source</th><th>Period used</th><th>Role</th></tr></thead>
+              <tbody>
+                <tr><td>FBI NIBRS arrest records</td><td>2023–2025</td><td>Monthly custodial arrests, offense type, race, and ethnicity</td></tr>
+                <tr><td>FBI ASR/SRS</td><td>2025</td><td>Direct source for qualifying agencies, translated to NIBRS-equivalent definitions</td></tr>
+                <tr><td>FBI Law Enforcement Employees and reviewed staffing sources</td><td>Through 2025</td><td>Preferred full-time sworn count and agency-year plausibility screen</td></tr>
+                <tr><td>Florida Criminal Justice Data Transparency</td><td>2025</td><td>Approved alternative for a county’s 2025 component</td></tr>
+                <tr><td>California DOJ OpenJustice</td><td>2024 source calibrated to 2025</td><td>Approved county-level alternative for selected California counties</td></tr>
+                <tr><td>American Community Survey and reviewed service geographies</td><td>Fixed 2025 analytical values</td><td>Population, covariates, denominators, and county allocation</td></tr>
+              </tbody>
+            </table></div>
+            <p>Arrest year follows the arrest date recorded in NIBRS even when the record appears in a master file labeled for a different year. Those records are not assumed to duplicate records in another master file.</p>
           </section>
 
           <section class="methods-section" id="definitions">
-            <p class="eyebrow">05 · Outcome definitions</p>
-            <h2>What counts as an arrest?</h2>
-            <p>
-              The target measure is a <strong>custodial arrest event</strong>, not every
-              enforcement contact reported in an arrest-related system. NIBRS distinguishes an
-              on-view arrest without a warrant or prior incident report (<code>O</code>), a person
-              taken into custody based on a warrant and/or prior incident report
-              (<code>T</code>), and a summons or citation without custody (<code>S</code>).
-            </p>
-            <p>
-              The estimates retain <code>O</code> and <code>T</code> arrests and exclude
-              <code>S</code> summonses and citations because agencies report them inconsistently.
-              NIBRS does not permit <code>T</code> arrests to be separated reliably into
-              warrant-only and prior-incident-report arrests.
-            </p>
-            <p>
-              One NIBRS row represents one counted custodial arrestee record. For Group A
-              offenses, count-arrestee and single-incident records are retained while additional
-              multiple-incident representations of the same arrestee are excluded. Group B
-              records are deduplicated using ORI, arrest transaction number, arrest date, and
-              arrestee sequence number.
-            </p>
-            <p>
-              A person may appear more than once if arrested in separate events. Arrest totals
-              are therefore neither unique-person counts nor counts of charges, convictions, or
-              jail admissions.
-            </p>
-
-            <h3>Low-level arrests</h3>
-            <p>
-              Each NIBRS custodial arrest is classified using its primary or most serious arrest
-              offense. “Low-level” is an analytical category, not a judgment about the statutory
-              grade or consequences of an individual case.
-            </p>
-            <div class="methods-table-wrap">
-              <table class="methods-table">
-                <thead><tr><th>NIBRS code</th><th>Included offense</th></tr></thead>
-                <tbody>
-                  <tr><td>23C</td><td>Shoplifting</td></tr>
-                  <tr><td>35A</td><td>Drug/Narcotic Violations only when linked activity indicates possession, concealment, use, or consumption—and no trafficking or production</td></tr>
-                  <tr><td>35B</td><td>Drug Equipment Violations</td></tr>
-                  <tr><td>39A–39D</td><td>Betting, wagering, operating or assisting gambling, gambling-equipment violations, and sports tampering</td></tr>
-                  <tr><td>40A</td><td>Prostitution</td></tr>
-                  <tr><td>40C</td><td>Purchasing Prostitution</td></tr>
-                  <tr><td>90B</td><td>Curfew, Loitering, or Vagrancy Violations</td></tr>
-                  <tr><td>90C</td><td>Disorderly Conduct</td></tr>
-                  <tr><td>90E</td><td>Drunkenness</td></tr>
-                  <tr><td>90F</td><td>Family Offenses, Nonviolent</td></tr>
-                  <tr><td>90G</td><td>Liquor Law Violations</td></tr>
-                  <tr><td>90I</td><td>Runaway</td></tr>
-                  <tr><td>90J</td><td>Trespass of Real Property</td></tr>
-                </tbody>
-              </table>
-            </div>
-            <p>
-              A 35A arrest is low-level only when all available activity codes indicate
-              possession/concealment and/or use/consumption. Trafficking, manufacturing, and
-              distribution are excluded. If the required activity information is absent, a 35A
-              arrest is not assigned to the low-level category.
-            </p>
+            <p class="eyebrow">04 · Outcomes</p><h2>Custodial and low-level arrests</h2>
+            <p>NIBRS on-view and taken-into-custody arrests are retained; summonses and citations without custody are excluded. Group A and Group B records use the established deduplication rules. A person can appear more than once when arrested in separate events.</p>
+            <p>Low-level arrests use the same offense definition as the prior release: specified drug-possession, drug-equipment, gambling, prostitution, public-order, liquor, runaway, and trespass categories. Drug/Narcotic Violations count as low-level only when the available activity codes indicate possession or use and do not indicate trafficking or production.</p>
           </section>
 
-          <section class="methods-section" id="race">
-            <p class="eyebrow">06 · Population groups</p>
-            <h2>Race and ethnicity</h2>
-            <ul>
-              <li><strong>Black arrests</strong> include arrestees reported as Black or African American, regardless of Hispanic ethnicity. The denominator is the ACS Black-alone population.</li>
-              <li><strong>Non-Hispanic White arrests</strong> include arrestees reported as White and not Hispanic or Latino. The denominator is the ACS non-Hispanic White-alone population.</li>
-              <li><strong>Black–White rate differences</strong> equal the Black rate minus the non-Hispanic White rate. They are differences per 100,000 residents, not ratios.</li>
-            </ul>
-            <p>
-              Race and ethnicity are not complete in every source. For credible NIBRS reporters,
-              directly observed Black shares among arrestees with known race are used when
-              available. Missing race is implicitly distributed according to estimated known-race
-              composition. For agencies without usable NIBRS race detail, Black shares are
-              predicted with the TabPFN procedure described below.
-            </p>
-            <p>
-              Missing ethnicity among arrestees reported as White may be divided between Hispanic
-              and non-Hispanic White, but a person reported as Black or another non-White race is
-              not reclassified as Hispanic merely because ethnicity is missing.
-            </p>
-            <p>
-              An agency is flagged for possible Hispanic underreporting when it reports no
-              Hispanic arrests and either comparable nearby agencies have a median Hispanic share
-              above 5% or the agency’s jurisdiction is more than 5% Hispanic. When applicable, an
-              offense-specific model estimates the Hispanic share within the combined
-              White/Hispanic pool. Unknown race is allocated separately between non-Hispanic
-              White and other non-Hispanic categories using agency, state-offense, and
-              national-offense fallbacks. Final margins are constrained to reconcile to the
-              agency total.
-            </p>
+          <section class="methods-section" id="credibility">
+            <p class="eyebrow">05 · Reporter screening</p><h2>Credibility is decided separately for each agency-year</h2>
+            <p>An agency-year must contain at least three months with a positive NIBRS arrest count. Police agency-years with a positive officer count must also reach one corrected arrest per full-time sworn officer. Sheriffs remain exempt from the ratio screen because patrol, jail, court, and civil-process responsibilities differ substantially.</p>
+            <p>A police agency-year below the ratio before correction is not discarded immediately. It enters the screening within-year fit and is retained if the corrected annual total reaches the threshold. Agency-years that still fail after correction are excluded from the final within-year fit and from every later imputation training set. Qualifying 2025 SRS agency-years receive the same police-versus-sheriff officer screen after their reporting-gap correction.</p>
           </section>
 
-          <section class="methods-section" id="staffing">
-            <p class="eyebrow">07 · Staffing</p>
-            <h2>Officer-count selection</h2>
-            <p>
-              The analysis focuses on <strong>full-time sworn officers</strong>. Part-time sworn
-              counts are retained and used to investigate unusual or missing full-time values, but
-              are not added to the primary officer denominator.
-            </p>
-            <p>
-              Staffing observations were compared across LEE 2020–2024, 2020 LEMAS, 2018 CSLLEA,
-              and 2022 ASPEP. The ASPEP record retains whether a value was reported or imputed.
-              When sources generally agreed, the most recent positive LEE count was preferred.
-            </p>
-            <p>
-              Strong disagreements were audited for crosswalk errors, obsolete ORIs,
-              parent-agency staffing assigned to a former local agency, inclusion of jail staff,
-              and implausible staffing relative to population or arrests. When disagreement
-              remained, the source producing the more plausible combination of officers per
-              resident and arrests per officer was selected or the case was marked ambiguous.
-              Sheriff comparisons were treated more cautiously because sources differ in their
-              treatment of jail, court, and civil-process staff.
-            </p>
-            <p>Agencies without an available positive full-time count are audited separately and are not silently assigned zero officers.</p>
+          <section class="methods-section" id="within-year">
+            <p class="eyebrow">06 · Partial reporting</p><h2>Persistent-underreporting correction within calendar years</h2>
+            <p>NumPyro fits the monthly model separately in 2023, 2024, and 2025. This prevents information from crossing a December–January boundary while still pooling agencies within a calendar year.</p>
+            <p>A zero month or a positive count no greater than 10% of that agency-year’s median positive monthly count is treated as missing. Other months can also be adjusted upward when their posterior probability of belonging to a persistent underreporting state is at least 80%. Entry into the underreporting state is discouraged, while remaining in the state from one month to the next is comparatively likely; this favors coherent spells over randomly scattered corrections.</p>
+            <p>The likelihood uses agency population, staffing, type, seasonal and shared temporal patterns, overdispersed counts, and shrinkage. Flagged months are reconstructed from the model, with the reported count as a lower bound. Unflagged months are preserved exactly. No correction can reduce an agency’s reported arrests.</p>
+            <div class="methods-callout"><p class="eyebrow">What the 10% rule does—and does not do</p><p>The 10% threshold automatically identifies fixed-rule missing months. It is not the upper limit on adjustment: another positive month may be adjusted when the persistent-state probability is high enough.</p></div>
           </section>
 
-          <section class="methods-section" id="reporters">
-            <p class="eyebrow">08 · Data eligibility</p>
-            <h2>Credible national reporters</h2>
-            <p>
-              Reporter status is determined only after all current ORIs belonging to the same
-              independent agency have been consolidated. An agency initially qualifies as a
-              credible NIBRS reporter if it has at least <strong>three months in 2025 with one or
-              more qualifying custodial NIBRS arrests</strong>. A historical participation flag
-              or directory listing is not sufficient.
-            </p>
-            <p>
-              A second plausibility rule is applied after within-year underreporting correction.
-              A non-sheriff police agency is not considered a usable reporter if its corrected
-              annual count is less than <strong>one arrest per selected full-time sworn
-              officer</strong>. Its report is then treated as unusable for estimation and coverage.
-              Sheriffs are exempt because their staffing and functions are too heterogeneous for
-              the same threshold to be reliable.
-            </p>
-            <p>
-              An agency does not need twelve positive months. Missing or abnormally low months are
-              addressed through the within-year correction. For agencies without credible NIBRS,
-              ASR/SRS is usable when the agency has no positive NIBRS months and at least three
-              positive ASR/SRS months. Agencies with neither source proceed to Florida
-              alternative data, where available, or national missing-agency imputation.
-            </p>
+          <section class="methods-section" id="missing-years">
+            <p class="eyebrow">07 · Annual gaps</p><h2>TabPFN fills missing aggregate calendar years</h2>
+            <p>After within-year correction and final credibility screening, each qualifying source supplies a complete agency-year total. For an agency with one or two direct years, TabPFN predicts each missing full calendar year. The training rows are direct agency-years; the query rows are missing agency-years.</p>
+            <p>Features include agency ID, state, agency type, primary county, calendar-year index, an agency-specific anchor derived from its direct years, and fixed 2025 population, location, race/ethnicity, poverty, and density covariates. Calendar-month features are not used because the target is an aggregate year. TabPFN runs on Apple MPS with one estimator.</p>
+            <p>Separate models predict the log total, low-level share, Black share within low-level and all-other arrests, and coherent non-Hispanic White, Hispanic, and other non-Hispanic composition within both offense strata. This produces total, low-level, Black, non-Hispanic White, Hispanic, low-level Black, and low-level non-Hispanic White counts that reconcile exactly.</p>
           </section>
 
-          <section class="methods-section" id="underreporting">
-            <p class="eyebrow">09 · Partial-year reporting</p>
-            <h2>Within-year underreporting correction</h2>
-            <p>
-              Some agencies submit credible counts for part of the year but report zero or
-              unusually low counts in other months. Rather than annualizing the number of active
-              months, the analysis uses a hierarchical monthly state-space model.
-            </p>
-            <p>The model estimates an agency’s expected monthly trajectory from:</p>
-            <ul>
-              <li>its typical arrest level;</li>
-              <li>population, agency type, location, staffing, and reporting source;</li>
-              <li>a shared national monthly path;</li>
-              <li>three shrinkable time-varying factors; and</li>
-              <li>a tightly regularized agency-specific monthly path.</li>
-            </ul>
-            <p>
-              Counts follow a negative-binomial model, which permits more month-to-month variation
-              than a Poisson model. Estimation is implemented in <strong>NumPyro</strong>, a
-              probabilistic-programming library for Python and JAX.
-            </p>
-            <p>A month is treated as potentially missing when its count is zero or no more than 10% of that agency’s median positive monthly count.</p>
-            <p>
-              Flagged months are excluded from the model likelihood and reconstructed from adjacent
-              months, agency characteristics, and shared temporal patterns. Their reported count is
-              retained as a lower bound. Every other reported month—including large upward
-              spikes—is preserved exactly. A sparse surge component prevents legitimate unusually
-              high months from being pulled downward automatically.
-            </p>
-            <p>
-              The result is an expected count for a reporting gap, not a claim to have recovered
-              the exact number of arrests. Florida CJDT monthly event counts receive the same type
-              of correction before source translation.
-            </p>
+          <section class="methods-section" id="fully-missing">
+            <p class="eyebrow">08 · No direct year</p><h2>Fully missing agencies are predicted on the three-year scale</h2>
+            <p>An agency with no direct usable year does not receive three separate annual forecasts. Instead, models are trained on the three-year average annual outcomes of agencies with three direct years and predict the missing agency’s three-year average annual total and composition directly.</p>
+            <p>Features include fixed 2025 population, agency type, staffing, state, primary county, coordinates, percent Black, percent Hispanic, poverty, and density. Five-fold out-of-fold predictions determine aggregate calibration factors before the final fit. The same coherence constraints are applied to offense and race/ethnicity components.</p>
           </section>
 
-          <section class="methods-section" id="imputation">
-            <p class="eyebrow">10 · Harmonization</p>
-            <h2>Source translation and imputation</h2>
-            <div class="methods-definition">
-              <p>
-                <strong>Tabular Prior-Data Fitted Network (TabPFN)</strong> is a pretrained neural
-                network designed for supervised prediction with tabular data. In this project it
-                is used to translate SRS and Florida data to NIBRS-equivalent measures, impute
-                agencies with no usable arrest data, and estimate Black arrest shares when usable
-                NIBRS race detail is unavailable.
-              </p>
-            </div>
-
-            <h3>ASR/SRS translation</h3>
-            <p>
-              ASR/SRS summaries do not measure arrests exactly like the filtered individual-level
-              NIBRS records. TabPFN models are trained on credible NIBRS agencies for which both
-              exact NIBRS custodial counts and SRS-format aggregates are available.
-            </p>
-            <p>
-              Separate models estimate the NIBRS-equivalent annual total and low-level share.
-              Predictors include SRS total arrests, its observable low-level share, population,
-              agency type, staffing, geography, poverty, density, and local demographic
-              composition. The model first translates the reported SRS total to the
-              reported-NIBRS scale. That result is then multiplied by the agency’s own
-              within-year corrected-to-reported SRS ratio, keeping source-system differences
-              separate from reporting outages.
-            </p>
-            <p>
-              Because SRS provides separate race and ethnicity margins rather than a joint table,
-              additional models estimate the non-Hispanic White and Hispanic portions. Final
-              components are constrained to sum to the translated total.
-            </p>
-
-            <h3>Agencies with no usable arrest source</h3>
-            <p>
-              For agencies without usable NIBRS, SRS, or qualifying Florida data, TabPFN models
-              trained on credible NIBRS reporters estimate the full set of measures. Separate
-              models predict total arrests on a logarithmic scale, low-level share on a log-odds
-              scale, Black shares, and race/ethnicity composition within low-level and all-other
-              arrests.
-            </p>
-            <p>
-              Predictors include population, police-versus-sheriff status, latitude and longitude,
-              full-time officers, state, primary county, percent Black, percent Hispanic, poverty,
-              and population density.
-            </p>
-            <div class="methods-formula"><p>Estimated low-level arrests = calibrated total arrests × calibrated low-level share</p></div>
-            <p>
-              Race and ethnicity are predicted as shares and multiplied by the corresponding
-              offense total. Multiplicative raking makes the components reconcile exactly to the
-              total, offense, and race/ethnicity margins. Calibration uses held-out agencies from
-              counties that initially had complete coverage. Where possible, agencies accounting
-              for approximately 20% of county officers were withheld, approximating the missingness
-              faced at the 80% publication threshold.
-            </p>
-            <p>
-              A fully imputed agency contributes to a published county estimate, but does not
-              count as a usable-data reporter in the coverage calculation.
-            </p>
-
-            <h3>Black arrest shares</h3>
-            <p>
-              Directly observed Black shares are retained for credible NIBRS agencies with known
-              race data. For other national agencies—including SRS reporters and agencies with no
-              usable report—a separately validated TabPFN share model uses agency characteristics
-              to estimate total and low-level Black shares. Florida and California use their
-              source-specific procedures described below.
-            </p>
-
-            <h3>Florida alternative data</h3>
-            <p>
-              Florida CJDT files are charge-level rather than event-level. Processing selects 2025
-              records, uses booking date only when arrest date is absent, removes exact duplicates
-              and duplicate charge keys, maps arresting ORIs to independent agencies, and
-              reconstructs events using agency, person identifier, and arrest date. Charge ID is a
-              conservative fallback when person ID is missing.
-            </p>
-            <p>
-              To approximate custodial NIBRS arrests, the filtered event count excludes records
-              consisting only of failure to appear, fugitive or out-of-county warrants, probation
-              or parole violations, contempt, generic warrants, explicit “not an arrest” records,
-              or routine traffic. DUI, hit-and-run, fleeing or eluding, and vehicular homicide or
-              manslaughter are retained.
-            </p>
-            <p>
-              Corrected monthly CJDT features and agency characteristics enter TabPFN models that
-              estimate NIBRS-equivalent totals, low-level shares, and racial and ethnic composition.
-              Training was limited to 116 dual-source agencies whose corrected CJDT and NIBRS
-              totals were not sharply inconsistent. Twenty agencies with a twofold-or-larger
-              discrepancy in either direction were excluded from training. Their NIBRS estimate
-              was retained when corrected NIBRS was higher; CJDT-based metrics were used when
-              corrected CJDT was higher. Of 130 final CJDT candidates, 126 passed the minimum
-              adjusted arrest-per-officer rule.
-            </p>
-
-            <h3>California alternative data</h3>
-            <p>
-              California OpenJustice provides county—not agency—arrest data. The latest statewide
-              file used here covers 2024, creating a one-year source-to-target lag. Its categories
-              do not reproduce the site’s low-level definition exactly.
-            </p>
-            <p>
-              Both TabPFN and a simpler calibration were evaluated for California. The
-              <strong>simple calibration was selected for production</strong>; California’s final
-              county estimates do not use TabPFN. The procedure scales the OpenJustice total by
-              the aggregate target-to-source ratio and applies arrest-weighted log-odds offsets to
-              its misdemeanor-plus-status, Black, and non-Hispanic White shares.
-            </p>
-            <p>
-              Total and low-level calibration used 37 counties with complete usable-data officer
-              coverage; race-specific calibration used 23 counties with stable race estimates.
-              Counties where OpenJustice and the national estimate differed by more than a factor
-              of two were excluded from training. The method publishes 10 otherwise-suppressed
-              California counties. Because the source is county aggregated, no synthetic agency
-              allocation is created; the calibrated county estimate replaces the county total.
-            </p>
+          <section class="methods-section" id="composition">
+            <p class="eyebrow">09 · Population groups</p><h2>Race and ethnicity composition</h2>
+            <p>Black arrests include people reported as Black regardless of Hispanic ethnicity. Non-Hispanic White arrests require White race and non-Hispanic ethnicity. Missing race is distributed from known-race composition. The existing zero-Hispanic reporting audit and model remain in use for direct NIBRS agency-years.</p>
+            <p>When an annual total is temporally imputed, its composition is modeled rather than copied mechanically from one year. When the entire three-year average is imputed, total and composition are predicted together. Black and non-Hispanic White rates use fixed 2025 Black-alone and non-Hispanic White-alone population denominators.</p>
           </section>
 
-          <section class="methods-section" id="validation">
-            <p class="eyebrow">11 · Model checks</p>
-            <h2>Validation</h2>
-            <p>
-              <strong>K-fold cross-validation</strong> divides observations into <em>k</em>
-              groups, repeatedly trains on <em>k−1</em> groups, and evaluates predictions for the
-              omitted group. It measures performance on agencies or counties not seen during
-              fitting.
-            </p>
-            <ul>
-              <li>Five-fold held-out-agency validation was used for SRS-to-NIBRS translation.</li>
-              <li>Ten-fold county-grouped validation was used for Florida so agencies from the same county did not appear in both training and testing.</li>
-              <li>Ten-fold held-out-county validation was used for California.</li>
-              <li>Structured agency and county holdouts, including simulated 80% officer coverage, were used for the national missing-agency models.</li>
-            </ul>
-            <p>
-              Validation examined total counts, low-level shares, racial and ethnic composition,
-              rates, and Black–White differences. Performance was judged acceptable before the
-              models were used in production. Cross-validation tests prediction for observed
-              agencies under simulated missingness; it cannot establish that every genuinely
-              nonreporting agency is estimated accurately.
-            </p>
-          </section>
-
-          <section class="methods-section" id="aggregation">
-            <p class="eyebrow">12 · Geography</p>
-            <h2>County allocation and aggregation</h2>
-            <p>
-              Agency arrests and officers are apportioned to counties using reviewed service
-              geographies. A county or county subdivision maps directly to its county. A Census
-              place crossing county lines is divided according to the 2020–2024 ACS population of
-              each place-within-county component. Components containing less than 1% of the place’s
-              population are dropped and the remaining weights are renormalized.
-            </p>
-            <p>
-              The same weights are applied to arrest and officer counts. Agency totals are thus
-              preserved when an agency crosses county lines. Bronx, Kings, New York, Queens, and
-              Richmond counties are combined into a single New York City analytical unit.
-            </p>
-            <p>Within each county, the final estimate directly sums:</p>
-            <ul>
-              <li>adjusted NIBRS agency estimates;</li>
-              <li>NIBRS-equivalent SRS estimates;</li>
-              <li>qualifying Florida estimates; and</li>
-              <li>model-based estimates for agencies with no usable data.</li>
-            </ul>
-            <p>
-              No inverse-coverage multiplier or officer-based scaling is applied after these
-              values are summed. California alternative counties are the exception because their
-              final values come from a direct county-level source.
-            </p>
+          <section class="methods-section" id="alternatives">
+            <p class="eyebrow">10 · State alternatives</p><h2>Florida and California affect counties, not agency records</h2>
+            <p>Approved Florida CJDT agency estimates and California OpenJustice county estimates are retained where the new procedure would otherwise use a temporal estimate for the 2025 county component. The 2023 and 2024 components are unchanged, so an alternative changes the three-year average by one third of the difference between the alternative and temporal 2025 values.</p>
+            <p>Agency detail always retains the NIBRS/SRS plus temporal-model estimate. It is not overwritten by CJDT or by a synthetic allocation of the California county total. County pages identify the alternative source and warn that the agency rows may not sum to the county headline.</p>
+            <p>Florida CJDT records are reconstructed from charge-level detention data and translated to the custodial NIBRS definition using the previously validated procedure. California uses the previously selected simple calibration of OpenJustice county totals and composition; the source file is for 2024 and is used as the approved proxy for the 2025 county component.</p>
           </section>
 
           <section class="methods-section" id="publication">
-            <p class="eyebrow">13 · Quality thresholds</p>
-            <h2>County publication and metric stability</h2>
-            <h3>Officer-based coverage</h3>
-            <p>The general publication threshold is <strong>80% usable-data officer coverage</strong>.</p>
-            <div class="methods-formula"><p>Coverage = apportioned full-time officers at usable-data agencies ÷ all known apportioned full-time officers serving the county</p></div>
-            <p>
-              Usable sources are NIBRS, SRS, and qualifying Florida data. Coverage is not the
-              percentage of agencies, residents, or arrests observed. Generic model-only
-              imputations do not enter the numerator. A county meeting the threshold may still
-              include imputed agencies, whose estimates are included in its total.
-            </p>
-            <p>
-              Counties below 80% are suppressed even though provisional estimates may exist
-              internally. The California county-source procedure can publish a county directly
-              when national-data officer coverage remains below 80%.
-            </p>
-            <p>
-              The current release publishes 2,523 county units and suppresses 607. Of the
-              published units, 888 include at least one nationally imputed agency and 10 use the
-              California calibration.
-            </p>
-
-            <h3>Metric-level instability</h3>
-            <p>
-              Suppression and instability are different. Within a published county, a metric is
-              marked unstable when the county has fewer than <strong>250 arrests in the underlying
-              reported source data</strong>, before within-year correction or generic imputation.
-              The source count is observed NIBRS arrests, reported SRS arrests, filtered Florida
-              substantive events, or raw California OpenJustice arrests, as applicable.
-            </p>
-            <p>
-              Black arrest rates, Black low-level rates, and both Black–White differences receive
-              an additional instability flag when the county has fewer than <strong>100 estimated
-              Black arrests</strong>. This criterion is applied only to Black-related metrics.
-              There is no minimum estimated-total-arrest rule.
-            </p>
-            <p>
-              An unstable value may still be displayed with a caution and included in rankings
-              when the user requests it. A rate is unavailable when its population denominator is
-              zero or missing.
-            </p>
+            <p class="eyebrow">11 · Quality thresholds</p><h2>County publication and stability</h2>
+            <p>The general publication threshold is 80% usable-data officer coverage. An agency contributes its fixed officer count to the numerator when it has at least one credible reporting year during 2023–2025; those values are allocated and summed within counties. An approved Florida source counts as a credible 2025 year. California’s approved county source can publish a county directly.</p>
+            <div class="methods-formula"><p>Coverage = Σ(officers at agencies with at least one credible year) ÷ Σ(officers)</p></div>
+            <p>Publication and metric uncertainty are different. For each count numerator, a metric-specific NB2 dispersion is estimated from within-county variation across the three annual estimates. The variance of the three-year mean is the NB2 annual variance divided by three. The site reports an approximate 90% credible interval and a coefficient of variation for every metric.</p>
+            <p>A county metric is visually suppressed on the map when its coefficient of variation exceeds 30%. Its county profile still reports the estimate and interval with a high-uncertainty note. These process-noise intervals treat reporting corrections, source translation, temporal imputation, composition imputation, and alternative-source calibration as fixed; they do not incorporate those other sources of uncertainty.</p>
           </section>
 
           <section class="methods-section" id="rates">
-            <p class="eyebrow">14 · Published measures</p>
-            <h2>Rates, percentiles, and rankings</h2>
-            <p>Every rate is reported per 100,000 relevant residents:</p>
-            <ul>
-              <li>overall rate = total estimated arrests ÷ total population × 100,000;</li>
-              <li>low-level rate = estimated low-level arrests ÷ total population × 100,000;</li>
-              <li>Black rate = estimated Black arrests ÷ Black-alone population × 100,000;</li>
-              <li>non-Hispanic White rate = estimated non-Hispanic White arrests ÷ non-Hispanic White-alone population × 100,000; and</li>
-              <li>Black–White difference = Black rate − non-Hispanic White rate.</li>
-            </ul>
-            <p>
-              Estimates may be fractional internally because of modeling and cross-county
-              apportionment. Displayed arrest counts are rounded to the nearest whole number, but
-              rates are calculated from unrounded values.
-            </p>
-            <p>
-              For each metric, the national percentile distribution is defined using only
-              published counties whose value is stable for that metric. Unstable estimates are
-              then located within that stable distribution without influencing it. Percentiles are
-              capped at 1 and 99; the site never reports 0 or 100.
-            </p>
-            <p>
-              Map colors use these percentiles. The ranking score is a weighted average of the
-              selected metric percentiles. Equal weight is assigned by default to overall and
-              low-level rates, Black overall and low-level rates, and the total and low-level
-              Black–White rate differences. Percentile scoring prevents a few extreme raw rates
-              from dominating the map or composite ranking.
-            </p>
-
-            <h3>Audit information shown for counties</h3>
-            <p>When applicable, a county page reports the share of estimated arrests affected by:</p>
-            <ul>
-              <li>cross-county apportionment;</li>
-              <li>SRS-to-NIBRS translation;</li>
-              <li>Florida CJDT translation;</li>
-              <li>within-year underreporting correction;</li>
-              <li>Hispanic-ethnicity imputation;</li>
-              <li>imputation for agencies with no usable arrest data; and</li>
-              <li>California OpenJustice calibration.</li>
-            </ul>
-            <p>A caution that does not apply to a county is omitted from its page.</p>
+            <p class="eyebrow">12 · Published measures</p><h2>Rates, percentiles, and rankings</h2>
+            <p>Rates divide an unrounded average annual arrest estimate by the fixed 2025 relevant population and multiply by 10,000. Black–White differences subtract the non-Hispanic White rate from the Black rate.</p>
+            <p>For each metric, percentile ranks and reference quartiles are defined using published counties at or below the 30% NB2 coefficient-of-variation threshold. Higher-uncertainty estimates are located in that reference distribution without influencing it. Percentiles are capped at 1 and 99.</p>
+            <p>County pages expose the mean annual contribution of cross-county allocation, source translation, within-year correction, temporal or fully missing-agency imputation, and state alternative sources when those components apply.</p>
           </section>
 
           <section class="methods-section" id="limitations">
-            <p class="eyebrow">15 · Interpretation</p>
-            <h2>Limitations</h2>
+            <p class="eyebrow">13 · Interpretation</p><h2>Limitations</h2>
             <ul>
-              <li>Administrative data can contain coding errors, delayed submissions, incorrect ORI assignments, and inconsistent local practices.</li>
-              <li>Treating zero or extremely low months as reporting gaps can overestimate arrests for an agency that genuinely made few or no arrests during those months.</li>
-              <li>The one-arrest-per-officer screen can classify a genuinely low-arrest police department as unusable. It is a data-quality rule, not a judgment about agency performance.</li>
-              <li>Sheriff responsibilities and staffing definitions differ substantially across counties and data sources.</li>
-              <li>SRS, Florida detention records, and California county data do not have exactly the same scope as individual-level NIBRS. Statistical translation reduces but cannot remove those differences.</li>
-              <li>California estimates use a 2024 source to approximate 2025 measures.</li>
-              <li>ACS denominators are 2020–2024 period estimates rather than exact 2025 populations.</li>
-              <li>County-specific confidence intervals are not currently reported. Coverage and instability flags are practical quality indicators, not complete uncertainty measures.</li>
-              <li>Arrest rates reflect enforcement activity as well as behavior, laws, policy, resources, reporting practices, and community conditions. They are not direct measures of crime prevalence or causal agency performance.</li>
+              <li>Administrative data can contain coding errors, delayed submissions, incorrect identifiers, and inconsistent local practices.</li>
+              <li>Persistent-state reconstruction can mistake a genuinely low-enforcement spell for underreporting, particularly when local context is unavailable.</li>
+              <li>The one-arrest-per-officer screen can reject a genuinely low-arrest police agency. It is a data-quality rule, not a judgment about performance.</li>
+              <li>Agency existence, independence, service areas, staffing, population, and covariates are intentionally held at their current 2025 analytical values rather than reconstructed historically.</li>
+              <li>SRS, Florida detention records, and California county data do not exactly match individual-level NIBRS. Calibration reduces but cannot remove those scope differences.</li>
+              <li>California’s 2024 source approximates the 2025 county component. The agency rows deliberately retain temporal estimates and therefore may not sum to an alternative-source county headline.</li>
+              <li>County-specific confidence intervals are not currently published. Coverage and stability flags are practical quality indicators, not complete uncertainty measures.</li>
+              <li>Arrest rates reflect enforcement, laws, policy, resources, reporting practices, and community conditions; they are not direct measures of crime prevalence or causal agency performance.</li>
             </ul>
-            <div class="methods-callout">
-              <p class="eyebrow">Interpret with context</p>
-              <p>Use the source notes, coverage measure, stability cautions, and agency-level detail alongside every county estimate.</p>
-            </div>
-            <p class="methods-footer-note">Current release: calendar-year 2025 estimates using the reviewed October 2026 roster and source-integration pipeline.</p>
+            <div class="methods-callout"><p class="eyebrow">Interpret with context</p><p>Use source notes, coverage, stability cautions, and agency-level detail alongside every county estimate.</p></div>
+            <p class="methods-footer-note">Current release: 2023–2025 average annual estimates using the reviewed October 2026 roster and fixed 2025 analytical frame.</p>
           </section>
         </article>
       </div>
     </main>
 
     <footer class="site-footer">
-      <p>2025 county arrest estimates · Rates shown per 100,000 relevant residents</p>
-      <div class="footer-actions">
-        <a class="text-button" href="./#map">Explore the map</a>
-        <a class="text-button" href="./#ranking">View rankings</a>
-        <a class="text-button" href="data/county-metrics.csv?v=20261026-california" download>Download county CSV</a>
-      </div>
+      <p>2023–2025 average annual county arrest estimates · Fixed 2025 population denominators</p>
+      <div class="footer-actions"><a class="text-button" href="./#map">Explore the map</a><a class="text-button" href="./#ranking">View rankings</a><a class="text-button" href="data/county-metrics.csv?v=20261026-three-year" download>Download county CSV</a></div>
     </footer>
   </body>
 </html>

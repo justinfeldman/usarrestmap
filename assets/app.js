@@ -18,7 +18,7 @@
   });
   const MAP_BOUNDS = Object.freeze({ x: 0, y: 0, width: 1000, height: 620 });
   const MAX_MAP_ZOOM = 8;
-  const DATA_VERSION = "20261026-california";
+  const DATA_VERSION = "20261026-three-year-final";
 
   const state = {
     payload: null,
@@ -159,7 +159,7 @@
       active ? link.setAttribute("aria-current", "page") : link.removeAttribute("aria-current");
     });
     if (routeName === "map") {
-      document.title = "County Arrest Estimates · 2025";
+      document.title = "County Arrest Estimates · 2023–2025 average annual";
       updateMap();
     } else if (routeName === "ranking") {
       document.title = "County Rankings · County Arrest Estimates";
@@ -330,7 +330,7 @@
   }
 
   function isMapMetricUnstable(county, metricKey = state.mapMetric) {
-    return county.generalCaution || (BLACK_RELATED_METRICS.has(metricKey) && county.raceCaution);
+    return Boolean(county.metrics[metricKey]?.unstable);
   }
 
   function percentileColor(percentile) {
@@ -369,7 +369,7 @@
     let detail = "Below the 80% coverage threshold";
     if (county.published && metric?.value !== null) {
       detail = isMapMetricUnstable(county)
-        ? `${formatRate(metric.value)} · marked unstable`
+        ? `${formatRate(metric.value)} · unstable estimates`
         : `${formatRate(metric.value)} · ${ordinal(metric.percentile)} percentile`;
     }
     els.tooltip.innerHTML = `<strong>${escapeHtml(county.name)}, ${county.state}</strong><span>${detail}</span>`;
@@ -416,7 +416,7 @@
       return;
     }
     const caution = isMapMetricUnstable(county)
-      ? `<p class="peek-caution">This metric is marked unstable under the small-number rules. The estimate remains available in county detail.</p>`
+      ? `<p class="peek-caution">This metric is visually suppressed because its NB2 process-noise coefficient of variation exceeds 30%. Open the county profile for the estimate and 90% interval.</p>`
       : "";
     const sourceNote = county.alternativeSources?.length
       ? `<p class="peek-source">Alternative source: ${escapeHtml(county.alternativeSources.map((source) => `${source.name} (${source.year})`).join("; "))}</p>`
@@ -428,7 +428,7 @@
       <div class="peek-facts">
         <div><span>Residents</span><strong>${formatNumber(county.population)}</strong></div>
         <div><span>Black residents</span><strong>${formatPct(county.blackPopulationPct)}</strong></div>
-        <div><span>Total arrest rate (per 100k residents)</span><strong>${formatRate(county.metrics.total_rate.value)}</strong></div>
+        <div><span>Total arrest rate (per 10k residents)</span><strong>${formatRate(county.metrics.total_rate.value)}</strong></div>
         <div><span>Officers with usable data</span><strong>${formatPct(county.coverage)}</strong></div>
       </div>
       ${caution}
@@ -480,7 +480,7 @@
     const activeWeights = Object.entries(state.weights).filter(([, weight]) => weight > 0);
     const weightTotal = activeWeights.reduce((sum, [, weight]) => sum + weight, 0);
     const candidates = state.payload.counties.filter((county) => {
-      const hasUnstableValues = county.generalCaution || county.raceCaution;
+      const hasUnstableValues = activeWeights.some(([key]) => county.metrics[key]?.unstable);
       if (!showFlagged && (!county.published || hasUnstableValues)) return false;
       if (minPop !== null && county.population < minPop) return false;
       if (minBlackPct !== null && county.blackPopulationPct < minBlackPct) return false;
@@ -519,15 +519,15 @@
       });
     });
     els.rankingCount.textContent = number.format(scored.length);
-    els.rankingNote.textContent = `${describeWeights()} · ${showFlagged ? "unstable included · suppressed shown last" : "stable published counties only"}`;
+    els.rankingNote.textContent = `${describeWeights()} · ${showFlagged ? "unstable estimates included · coverage-suppressed shown last" : "published counties below the 30% CV threshold only"}`;
     els.loadMore.hidden = state.rankingLimit >= rankedRows.length;
   }
 
   function rankingRowHtml({ county, score, complete, rank }) {
     const status = !county.published
       ? `<span class="badge partial">Below coverage</span>`
-      : county.generalCaution || county.raceCaution
-        ? `<span class="badge caution">Unstable value</span>`
+      : Object.values(county.metrics).some((metric) => metric.unstable)
+        ? `<span class="badge caution">Unstable estimates</span>`
         : !complete
           ? `<span class="badge partial">Missing denominator</span>`
           : "";
@@ -603,22 +603,7 @@
       "black_white_low_difference",
     ];
     const countyAgencies = state.agencies[county.geoid] || [];
-    const smallNumberCautions = [];
-    if (county.generalCaution) {
-      smallNumberCautions.push({
-        label: "Small real reported arrest count",
-        pct: null,
-        description: `${formatArrestCount(county.originalRealArrests)} arrests in the underlying reported data; at least 250 are required for a stable estimate. This uses NIBRS counts, ASR/SRS counts, or filtered Florida county-detention events according to the agency's source.`,
-      });
-    }
-    if (county.raceCaution && !county.generalCaution) {
-      smallNumberCautions.push({
-        label: "Small estimated Black arrest count",
-        pct: null,
-        description: `${formatArrestCount(county.metrics.black_total_rate.numerator)} estimated Black arrests; the stability threshold is 100.`,
-      });
-    }
-    const allCautions = [...smallNumberCautions, ...county.cautions];
+    const allCautions = county.cautions;
     const alternativeSourceSection = county.alternativeSources?.length
       ? `<section class="alternative-source-panel panel">
           <p class="eyebrow">Alternative arrest data used</p>
@@ -626,11 +611,11 @@
         </section>`
       : "";
     const countyLevelAlternative = county.alternativeSources?.some(
-      (source) => source.geography === "county",
+      (source) => source.geography === "county" || source.countyHeadlineOverride,
     );
     const agencyDescription = countyLevelAlternative
-      ? "Agency rows reflect available national reporting data and will not sum to the county headline estimates, which use a county-level alternative source."
-      : "Arrest counts and officers are apportioned to this county. Agencies are ordered by estimated total arrests contributed here.";
+      ? "Agency rows retain the temporally modeled 2023–2025 average annual values and may not sum to the county headline, whose 2025 component uses an approved alternative source."
+      : "Average annual arrest counts and officers are apportioned to this county. Agencies are ordered by estimated total arrests contributed here.";
     els.countyView.innerHTML = `
       <a class="back-link" href="#map">← Back to national map</a>
       <header class="county-hero">
@@ -643,7 +628,7 @@
       </header>
       ${alternativeSourceSection}
       <div class="metric-grid-intro">
-        <p>Bars plot the estimated rate. Reference marks show the national 25th percentile, median, and 75th percentile among counties with stable values for each metric.</p>
+        <p>Bars plot the estimated rate per 10,000. Each card reports an approximate 90% credible interval from NB2 process noise. These intervals do not include uncertainty from corrections, imputations, source translation, or alternative data.</p>
       </div>
       <section class="metric-grid" aria-label="County headline metrics">
         ${topMetrics.map((key, index) => metricCardHtml(county, key, index === 2)).join("")}
@@ -662,7 +647,7 @@
         </section>
         <section class="section-panel panel">
           <p class="eyebrow">Applicable cautions</p>
-          ${allCautions.length ? `<div class="caution-list">${allCautions.map(cautionHtml).join("")}</div>` : '<p class="no-cautions">No small-number or adjustment cautions apply to this county.</p>'}
+          ${allCautions.length ? `<div class="caution-list">${allCautions.map(cautionHtml).join("")}</div>` : '<p class="no-cautions">No adjustment or alternative-source cautions apply to this county.</p>'}
         </section>
       </div>
       <section class="agency-panel panel">
@@ -713,11 +698,19 @@
     const scaleLabel = metric.value === null || metric.value === undefined
       ? `National reference values: 25th percentile ${formatRate(summary.p25)}, median ${formatRate(summary.median)}, and 75th percentile ${formatRate(summary.p75)}.`
       : `County rate ${formatRate(metric.value)}. National reference values: 25th percentile ${formatRate(summary.p25)}, median ${formatRate(summary.median)}, and 75th percentile ${formatRate(summary.p75)}.`;
+    const cvLabel = metric.cv === null || metric.cv === undefined
+      ? "not estimable"
+      : formatPct(metric.cv * 100);
+    const uncertaintyNote = metric.unstable
+      ? `<p class="metric-uncertainty-warning">Unstable estimates: CV ${cvLabel} exceeds the 30% display threshold or cannot be estimated. The map suppresses this metric.</p>`
+      : "";
     return `<article class="metric-card ${featured ? "featured" : ""}">
-      ${metric.unstable ? '<span class="badge caution">Caution</span>' : ""}
+      ${metric.unstable ? '<span class="badge caution">Unstable estimates</span>' : ""}
       <span>${escapeHtml(meta.label)}</span>
       <strong>${formatRate(metric.value)}</strong>
       <div class="metric-unit">${escapeHtml(meta.unit)}</div>
+      <div class="metric-interval">90% CrI ${formatRate(metric.lower90)}–${formatRate(metric.upper90)}</div>
+      ${uncertaintyNote}
       <small class="metric-percentile">${ordinal(metric.percentile)} percentile</small>
       <div class="rate-scale" role="img" aria-label="${escapeHtml(scaleLabel)}">
         <div class="rate-track">
@@ -764,8 +757,13 @@
   }
 
   function agencyRowHtml(agency) {
+    const sourceNote = agency.directYears === 0
+      ? " · fully imputed 3-year average"
+      : agency.temporalImputation
+        ? ` · ${agency.directYears}/3 direct years; missing years imputed`
+        : " · 3/3 direct years";
     return `<tr>
-      <td class="agency-name"><strong>${escapeHtml(agency.name || agency.ori)}</strong><small>${escapeHtml(agency.ori)} · ${escapeHtml(agency.type || "Agency")}${agency.nonreporterImputed ? " · imputed nonreporter" : ""}</small></td>
+      <td class="agency-name"><strong>${escapeHtml(agency.name || agency.ori)}</strong><small>${escapeHtml(agency.ori)} · ${escapeHtml(agency.type || "Agency")}${sourceNote}</small></td>
       <td>${formatPct(agency.allocationPct)}</td><td>${formatNumber(agency.officers)}</td>
       <td>${formatArrestCount(agency.total)}</td><td>${formatArrestCount(agency.low)}</td><td>${formatArrestCount(agency.other)}</td>
       <td>${formatArrestCount(agency.black)}</td><td>${formatArrestCount(agency.lowBlack)}</td>

@@ -5,11 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta
       name="description"
-      content="Explore 2025 county-level arrest estimates, coverage, racial disparities, and agency contributions."
+      content="Explore 2023–2025 average annual county arrest estimates, coverage, racial disparities, and agency contributions."
     />
     <meta name="theme-color" content="#0a0c11" />
-    <title>County Arrest Estimates · 2025</title>
-    <link rel="stylesheet" href="assets/styles.css?v=20261026-methods" />
+    <title>County Arrest Estimates · 2023–2025 average annual</title>
+    <link rel="stylesheet" href="assets/styles.css?v=20261026-three-year-final" />
   </head>
   <body>
     <a class="skip-link" href="#main">Skip to content</a>
@@ -18,7 +18,7 @@
         <span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i></span>
         <span>
           <strong>County Arrest Estimates</strong>
-          <small>United States · 2025</small>
+          <small>United States · 2023–2025 average annual</small>
         </span>
       </a>
       <nav class="primary-nav" aria-label="Primary navigation">
@@ -41,7 +41,7 @@
             <p class="eyebrow">National county profile</p>
             <h1>Where arrest rates are highest—and where the data hold up.</h1>
             <p class="lede">
-              Explore percentile-shaded 2025 estimates. Counties where agencies with usable arrest
+              Explore percentile-shaded 2023–2025 average annual estimates. Counties where agencies with usable arrest
               data serve less than 80% of known officers are clearly separated from published estimates.
             </p>
           </div>
@@ -79,7 +79,7 @@
                 <span class="kicker" id="map-metric-kicker">Percentile against stable county estimates</span>
                 <h2 id="map-metric-title">Total arrest rate</h2>
               </div>
-              <span class="unit-pill" id="map-metric-unit">per 100k residents</span>
+              <span class="unit-pill" id="map-metric-unit">per 10k residents</span>
             </div>
             <div class="map-stage" id="map-stage">
               <div class="map-zoom-controls" aria-label="Map zoom controls">
@@ -103,7 +103,7 @@
             </div>
             <div class="legend" aria-label="Map legend">
               <div class="legend-gradient"><span>Lower percentile</span><i></i><span>Higher percentile</span></div>
-              <div class="legend-status"><span><i class="swatch unstable"></i> Unstable measure</span><span><i class="swatch suppressed"></i> Below 80% coverage</span></div>
+              <div class="legend-status"><span><i class="swatch unstable"></i> CV above 30%</span><span><i class="swatch suppressed"></i> Below 80% coverage</span></div>
             </div>
           </section>
 
@@ -154,7 +154,7 @@
               <label class="switch-row">
                 <input id="show-unstable-suppressed" type="checkbox" />
                 <span class="switch" aria-hidden="true"></span>
-                <span>Show counties with unstable or suppressed values</span>
+                <span>Show counties with high-uncertainty or suppressed values</span>
               </label>
             </div>
           </aside>
@@ -197,9 +197,9 @@
     </main>
 
     <footer class="site-footer">
-      <p>2025 county arrest estimates · Rates shown per 100,000 relevant residents</p>
+      <p>2023–2025 average annual county arrest estimates · Rates use fixed 2025 population denominators per 10,000 relevant residents</p>
       <div class="footer-actions">
-        <a class="text-button" href="data/county-metrics.csv?v=20261026-california" download>Download county CSV</a>
+        <a class="text-button" href="data/county-metrics.csv?v=20261026-three-year" download>Download county CSV</a>
         <a class="text-button" href="methods.html">Full methods</a>
         <button class="text-button" id="method-footer-button" type="button">Quick guide</button>
       </div>
@@ -213,17 +213,17 @@
         <section>
           <span class="method-number">01</span>
           <h3>Coverage first</h3>
-          <p>County estimates are generally published when agencies with usable real data account for at least 80% of the known officers serving the county. Florida agency records and California county records can provide an alternative source where national reporting is incomplete. A non-sheriff agency reporting fewer than one underreporting-corrected arrest per full-time officer is treated as having no usable arrest report.</p>
+          <p>County estimates are generally published when at least 80% of officers are at agencies with one or more credible reporting years during 2023–2025. Approved Florida and California sources supply the 2025 county component where a temporal imputation would otherwise be used; the agency table retains the temporal estimates. A non-sheriff agency-year with fewer than one corrected arrest per full-time officer is treated as having no usable report.</p>
         </section>
         <section>
           <span class="method-number">02</span>
-          <h3>Small-number caution</h3>
-          <p>A metric is marked unstable when the county has fewer than 250 arrests in the underlying reported data—using the applicable national, Florida, or California source. There is no minimum estimated-arrest threshold. Black and race-difference metrics are also marked when estimated Black arrests are below 100.</p>
+          <h3>Process-noise uncertainty</h3>
+          <p>Each metric has an approximate 90% credible interval based on an NB2 model for ordinary year-to-year count variation. A metric is visually suppressed on the map when its coefficient of variation exceeds 30%. These intervals do not include uncertainty from reporting corrections, source translation, or imputation.</p>
         </section>
         <section>
           <span class="method-number">03</span>
           <h3>Robust comparison</h3>
-          <p>Each metric’s percentiles and quartiles are defined only by counties whose estimate is stable for that metric. Unstable estimates are then located within that stable reference distribution without influencing it. This keeps outliers from dominating the map or composite score.</p>
+          <p>Each metric’s percentiles and quartiles are defined using published counties whose NB2 coefficient of variation is no greater than 30%. Higher-uncertainty estimates are then located within that reference distribution without influencing it.</p>
         </section>
         <section>
           <span class="method-number">04</span>
@@ -239,6 +239,6 @@
     </dialog>
 
     <datalist id="county-options"></datalist>
-    <script src="assets/app.js?v=20261026-california-data" defer></script>
+    <script src="assets/app.js?v=20261026-three-year-final" defer></script>
   </body>
 </html>

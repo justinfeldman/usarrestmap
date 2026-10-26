@@ -1230,6 +1230,21 @@ input[type="range"] {
   font-weight: 700;
 }
 
+.metric-interval {
+  color: #cbd6df;
+  font-size: 0.64rem;
+  font-weight: 720;
+}
+
+.metric-uncertainty-warning {
+  margin: 8px 0 0;
+  border-left: 2px solid var(--amber);
+  padding-left: 8px;
+  color: var(--amber);
+  font-size: 0.58rem;
+  line-height: 1.4;
+}
+
 .rate-scale {
   min-height: 64px;
   margin: 24px 2px 0;
