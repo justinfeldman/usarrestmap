@@ -1,0 +1,53 @@
+{
+  "counties": 3130,
+  "published": 2488,
+  "suppressed": 642,
+  "agency_county_rows": 15090,
+  "county_csv_rows": 3130,
+  "county_csv_columns": 67,
+  "map_paths": 3130,
+  "missing_acs_black_population": 0,
+  "missing_map_paths": [],
+  "metric_summaries": {
+    "total_rate": {
+      "p25": 1366.82,
+      "median": 1896.27,
+      "p75": 2633.93
+    },
+    "low_rate": {
+      "p25": 277.35,
+      "median": 434.06,
+      "p75": 648.9
+    },
+    "black_total_rate": {
+      "p25": 3990.69,
+      "median": 5912.54,
+      "p75": 9436.82
+    },
+    "black_low_rate": {
+      "p25": 857.57,
+      "median": 1430.12,
+      "p75": 2283.75
+    },
+    "black_white_difference": {
+      "p25": 2712.15,
+      "median": 4402.34,
+      "p75": 7604.74
+    },
+    "black_white_low_difference": {
+      "p25": 532.33,
+      "median": 1009.93,
+      "p75": 1741.73
+    },
+    "white_total_rate": {
+      "p25": 1031.71,
+      "median": 1504.11,
+      "p75": 2184.17
+    },
+    "white_low_rate": {
+      "p25": 210.9,
+      "median": 367.84,
+      "p75": 559.74
+    }
+  }
+}

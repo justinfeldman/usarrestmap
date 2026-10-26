@@ -1,0 +1,241 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="Explore 2025 county-level arrest estimates, coverage, racial disparities, and agency contributions."
+    />
+    <meta name="theme-color" content="#0a0c11" />
+    <title>County Arrest Estimates · 2025</title>
+    <link rel="stylesheet" href="assets/styles.css" />
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <header class="site-header">
+      <a class="brand" href="#map" aria-label="County Arrest Estimates home">
+        <span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i></span>
+        <span>
+          <strong>County Arrest Estimates</strong>
+          <small>United States · 2025</small>
+        </span>
+      </a>
+      <nav class="primary-nav" aria-label="Primary navigation">
+        <a data-nav="map" href="#map">Map</a>
+        <a data-nav="ranking" href="#ranking">Rankings</a>
+      </nav>
+      <button class="method-button" id="method-button" type="button">About the estimates</button>
+    </header>
+
+    <main id="main">
+      <div class="loading-shell" id="loading-shell" role="status" aria-live="polite">
+        <div class="loading-orbit" aria-hidden="true"></div>
+        <p>Preparing county estimates…</p>
+      </div>
+
+      <section class="view map-view" id="map-view" hidden>
+        <div class="view-heading map-heading">
+          <div>
+            <p class="eyebrow">National county profile</p>
+            <h1>Where arrest rates are highest—and where the data hold up.</h1>
+            <p class="lede">
+              Explore percentile-shaded 2025 estimates. Counties where agencies with usable arrest
+              data serve less than 80% of known officers are clearly separated from published estimates.
+            </p>
+          </div>
+          <div class="headline-stat" aria-label="Published coverage summary">
+            <span id="published-count">—</span>
+            <p>county units meet<br />the coverage standard</p>
+          </div>
+        </div>
+
+        <div class="map-controls control-bar">
+          <label class="field metric-field">
+            <span>Map metric</span>
+            <select id="map-metric">
+              <option value="total_rate">Total arrest rate</option>
+              <option value="black_low_rate">Low-level arrest rate — Black residents</option>
+              <option value="black_total_rate">Total arrest rate — Black residents</option>
+              <option value="low_rate">Low-level arrest rate</option>
+              <option value="black_white_difference">Black–White total rate difference</option>
+              <option value="black_white_low_difference">Black–White low-level rate difference</option>
+            </select>
+          </label>
+          <form class="county-search" id="map-search-form">
+            <label class="field">
+              <span>Find a county</span>
+              <input id="map-search" list="county-options" placeholder="Search county or state" autocomplete="off" />
+            </label>
+            <button class="button secondary" type="submit">Find</button>
+          </form>
+        </div>
+
+        <div class="map-layout">
+          <section class="map-card panel" aria-label="Interactive county map">
+            <div class="map-meta">
+              <div>
+                <span class="kicker" id="map-metric-kicker">Percentile against stable county estimates</span>
+                <h2 id="map-metric-title">Total arrest rate</h2>
+              </div>
+              <span class="unit-pill" id="map-metric-unit">per 100k residents</span>
+            </div>
+            <div class="map-stage" id="map-stage">
+              <div class="map-zoom-controls" aria-label="Map zoom controls">
+                <button id="map-zoom-in" type="button" aria-label="Zoom in">+</button>
+                <button id="map-zoom-out" type="button" aria-label="Zoom out">−</button>
+                <button id="map-zoom-reset" type="button" aria-label="Reset map zoom">Reset</button>
+                <output id="map-zoom-level" aria-live="polite">100%</output>
+              </div>
+              <svg id="county-map" viewBox="0 0 1000 620" role="img" aria-labelledby="map-svg-title map-svg-desc">
+                <title id="map-svg-title">United States county arrest estimate map</title>
+                <desc id="map-svg-desc">Select a county to inspect its estimates and publication status. Use the zoom controls or scroll to zoom, then drag to pan.</desc>
+                <defs>
+                  <pattern id="unstable-pattern" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+                    <rect width="8" height="8" fill="#27303d"></rect>
+                    <rect width="2" height="8" fill="#738094"></rect>
+                  </pattern>
+                </defs>
+                <g id="county-paths"></g>
+              </svg>
+              <div class="map-tooltip" id="map-tooltip" role="status" hidden></div>
+            </div>
+            <div class="legend" aria-label="Map legend">
+              <div class="legend-gradient"><span>Lower percentile</span><i></i><span>Higher percentile</span></div>
+              <div class="legend-status"><span><i class="swatch unstable"></i> Unstable measure</span><span><i class="swatch suppressed"></i> Below 80% coverage</span></div>
+            </div>
+          </section>
+
+          <aside class="county-peek panel" id="county-peek" aria-live="polite">
+            <div class="empty-peek">
+              <span class="pulse-dot"></span>
+              <p class="eyebrow">County detail</p>
+              <h2>Select a county</h2>
+              <p>Click the map to see its estimates, population, and publication status.</p>
+            </div>
+          </aside>
+        </div>
+      </section>
+
+      <section class="view ranking-view" id="ranking-view" hidden>
+        <div class="view-heading ranking-heading">
+          <div>
+            <p class="eyebrow">Custom comparison</p>
+            <h1>Build a ranking that reflects what matters to you.</h1>
+            <p class="lede">
+              Scores are weighted averages of percentile ranks anchored to stable county estimates,
+              so a single extreme value cannot overwhelm the result.
+            </p>
+          </div>
+          <div class="score-key">
+            <span>Composite score</span>
+            <strong>1—99</strong>
+            <small>robust percentile scale</small>
+          </div>
+        </div>
+
+        <div class="ranking-layout">
+          <aside class="ranking-controls panel">
+            <div class="control-section">
+              <p class="eyebrow">Metric weights</p>
+              <h2>Tune the score</h2>
+              <p class="control-note">Weights are automatically rescaled to total 100%.</p>
+              <div id="weight-controls"></div>
+              <button class="text-button" id="reset-weights" type="button">Reset equal weights</button>
+            </div>
+            <div class="control-section filters">
+              <p class="eyebrow">Inclusion filters</p>
+              <div class="filter-grid">
+                <label class="field"><span class="range-label">Minimum population <output id="min-pop-output">No minimum</output></span><input id="min-pop" type="range" min="0" max="100" step="1" value="0" /></label>
+                <label class="field"><span class="range-label">Minimum % Black <output id="min-black-pct-output">5%</output></span><input id="min-black-pct" type="range" min="0" max="100" step="1" value="5" /></label>
+                <label class="field"><span>County search</span><input id="ranking-search" type="search" placeholder="Name or state" /></label>
+              </div>
+              <label class="switch-row">
+                <input id="show-unstable-suppressed" type="checkbox" />
+                <span class="switch" aria-hidden="true"></span>
+                <span>Show counties with unstable or suppressed values</span>
+              </label>
+            </div>
+          </aside>
+
+          <section class="ranking-results panel" aria-labelledby="ranking-results-title">
+            <div class="results-head">
+              <div>
+                <p class="eyebrow">Ranked counties</p>
+                <h2 id="ranking-results-title"><span id="ranking-count">—</span> counties</h2>
+              </div>
+              <p class="results-note" id="ranking-note">Equal weights · published counties only</p>
+            </div>
+            <div class="table-wrap ranking-table-wrap">
+              <table class="data-table ranking-table">
+                <thead>
+                  <tr>
+                    <th scope="col">Rank</th>
+                    <th scope="col">County</th>
+                    <th scope="col">Score</th>
+                    <th scope="col">Total</th>
+                    <th scope="col">Low-level</th>
+                    <th scope="col">Black total</th>
+                    <th scope="col">Black low-level</th>
+                    <th scope="col">Black–White total Δ</th>
+                    <th scope="col">Black–White low Δ</th>
+                    <th scope="col"><span class="sr-only">Status</span></th>
+                  </tr>
+                </thead>
+                <tbody id="ranking-body"></tbody>
+              </table>
+            </div>
+            <button class="button secondary load-more" id="load-more" type="button">Show 50 more</button>
+          </section>
+        </div>
+      </section>
+
+      <section class="view county-view" id="county-view" hidden>
+        <div id="county-content"></div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <p>2025 county arrest estimates · Rates shown per 100,000 relevant residents</p>
+      <div class="footer-actions">
+        <a class="text-button" href="data/county-metrics.csv" download>Download county CSV</a>
+        <button class="text-button" id="method-footer-button" type="button">Method &amp; thresholds</button>
+      </div>
+    </footer>
+
+    <dialog class="method-dialog" id="method-dialog">
+      <button class="dialog-close" id="method-close" type="button" aria-label="Close">×</button>
+      <p class="eyebrow">Reading the estimates</p>
+      <h2>Publication, stability, and interpretation</h2>
+      <div class="method-grid">
+        <section>
+          <span class="method-number">01</span>
+          <h3>Coverage first</h3>
+          <p>County estimates are published only when agencies with usable real data account for at least 80% of the known officers serving the county. Agencies with fully estimated arrest totals do not count toward that threshold. A non-sheriff agency reporting fewer than one underreporting-corrected arrest per full-time officer is treated as having no usable arrest report.</p>
+        </section>
+        <section>
+          <span class="method-number">02</span>
+          <h3>Small-number caution</h3>
+          <p>A metric is marked unstable when the county has fewer than 250 real reported arrests—using NIBRS counts for NIBRS-pathway agencies and ASR/SRS counts when the SRS pathway is used. There is no minimum estimated-arrest threshold. Black and race-difference metrics are also marked when estimated Black arrests are below 100.</p>
+        </section>
+        <section>
+          <span class="method-number">03</span>
+          <h3>Robust comparison</h3>
+          <p>Each metric’s percentiles and quartiles are defined only by counties whose estimate is stable for that metric. Unstable estimates are then located within that stable reference distribution without influencing it. This keeps outliers from dominating the map or composite score.</p>
+        </section>
+        <section>
+          <span class="method-number">04</span>
+          <h3>Race-specific rates</h3>
+          <p>Black arrest numerators use directly reported NIBRS Black-race shares when available and estimates from a validated statistical model otherwise. Black denominators are Black-alone ACS residents; White denominators are non-Hispanic White-alone residents.</p>
+        </section>
+      </div>
+      <div class="dialog-footnote">
+        <strong>These are statistical estimates, not exact counts.</strong>
+        Use county cautions and agency provenance to understand how much modeling or data transformation contributes to a result.
+      </div>
+    </dialog>
+
+    <datalist id="county-options"></datalist>
+    <script src="assets/app.js" defer></script>
+  </body>
+</html>
