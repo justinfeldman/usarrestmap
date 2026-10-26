@@ -18,6 +18,7 @@
   });
   const MAP_BOUNDS = Object.freeze({ x: 0, y: 0, width: 1000, height: 620 });
   const MAX_MAP_ZOOM = 8;
+  const DATA_VERSION = "20261026-california";
 
   const state = {
     payload: null,
@@ -42,9 +43,9 @@
     bindStaticEvents();
     try {
       const [payload, agencies, paths] = await Promise.all([
-        fetch("data/site-data.json").then(checkResponse).then((r) => r.json()),
-        fetch("data/agencies.json").then(checkResponse).then((r) => r.json()),
-        fetch("data/map-paths.json").then(checkResponse).then((r) => r.json()),
+        fetch(`data/site-data.json?v=${DATA_VERSION}`).then(checkResponse).then((r) => r.json()),
+        fetch(`data/agencies.json?v=${DATA_VERSION}`).then(checkResponse).then((r) => r.json()),
+        fetch(`data/map-paths.json?v=${DATA_VERSION}`).then(checkResponse).then((r) => r.json()),
       ]);
       state.payload = payload;
       state.agencies = agencies;
