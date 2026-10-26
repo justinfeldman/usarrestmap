@@ -9,7 +9,7 @@
     />
     <meta name="theme-color" content="#0a0c11" />
     <title>County Arrest Estimates · 2025</title>
-    <link rel="stylesheet" href="assets/styles.css" />
+    <link rel="stylesheet" href="assets/styles.css?v=20261026-alternative-sources" />
   </head>
   <body>
     <a class="skip-link" href="#main">Skip to content</a>
@@ -89,7 +89,7 @@
               </div>
               <svg id="county-map" viewBox="0 0 1000 620" role="img" aria-labelledby="map-svg-title map-svg-desc">
                 <title id="map-svg-title">United States county arrest estimate map</title>
-                <desc id="map-svg-desc">Select a county to inspect its estimates and publication status. Use the zoom controls or scroll to zoom, then drag to pan.</desc>
+                <desc id="map-svg-desc">Select a county to inspect its estimates and publication status. Zoom in, then drag the map to pan.</desc>
                 <defs>
                   <pattern id="unstable-pattern" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
                     <rect width="8" height="8" fill="#27303d"></rect>
@@ -211,12 +211,12 @@
         <section>
           <span class="method-number">01</span>
           <h3>Coverage first</h3>
-          <p>County estimates are published only when agencies with usable real data account for at least 80% of the known officers serving the county. Agencies with fully estimated arrest totals do not count toward that threshold. A non-sheriff agency reporting fewer than one underreporting-corrected arrest per full-time officer is treated as having no usable arrest report.</p>
+          <p>County estimates are generally published when agencies with usable real data account for at least 80% of the known officers serving the county. Florida agency records and California county records can provide an alternative source where national reporting is incomplete. A non-sheriff agency reporting fewer than one underreporting-corrected arrest per full-time officer is treated as having no usable arrest report.</p>
         </section>
         <section>
           <span class="method-number">02</span>
           <h3>Small-number caution</h3>
-          <p>A metric is marked unstable when the county has fewer than 250 real reported arrests—using NIBRS counts for NIBRS-pathway agencies and ASR/SRS counts when the SRS pathway is used. There is no minimum estimated-arrest threshold. Black and race-difference metrics are also marked when estimated Black arrests are below 100.</p>
+          <p>A metric is marked unstable when the county has fewer than 250 arrests in the underlying reported data—using the applicable national, Florida, or California source. There is no minimum estimated-arrest threshold. Black and race-difference metrics are also marked when estimated Black arrests are below 100.</p>
         </section>
         <section>
           <span class="method-number">03</span>
@@ -226,7 +226,7 @@
         <section>
           <span class="method-number">04</span>
           <h3>Race-specific rates</h3>
-          <p>Black arrest numerators use directly reported NIBRS Black-race shares when available and estimates from a validated statistical model otherwise. Black denominators are Black-alone ACS residents; White denominators are non-Hispanic White-alone residents.</p>
+          <p>Black arrest numerators use directly reported Black-race shares when available and validated estimates otherwise. Black denominators are Black-alone ACS residents; White denominators are non-Hispanic White-alone residents.</p>
         </section>
       </div>
       <div class="dialog-footnote">
@@ -236,6 +236,6 @@
     </dialog>
 
     <datalist id="county-options"></datalist>
-    <script src="assets/app.js" defer></script>
+    <script src="assets/app.js?v=20261026-alternative-sources" defer></script>
   </body>
 </html>

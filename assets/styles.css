@@ -496,6 +496,7 @@ select {
 .map-zoom-controls button:disabled {
   color: #596474;
   cursor: default;
+  opacity: 0.55;
 }
 
 .map-zoom-controls output {
@@ -1098,6 +1099,70 @@ input[type="range"] {
   letter-spacing: -0.05em;
 }
 
+.alternative-source-panel {
+  margin: 16px 0;
+  padding: 20px 24px;
+  border-color: rgba(104, 212, 255, 0.2);
+  background: linear-gradient(135deg, rgba(104, 212, 255, 0.075), rgba(18, 23, 32, 0.88));
+}
+
+.alternative-source-panel > .eyebrow {
+  margin-bottom: 12px;
+  color: var(--blue);
+}
+
+.alternative-source-list {
+  display: grid;
+  gap: 12px;
+}
+
+.alternative-source-item {
+  display: grid;
+  grid-template-columns: minmax(220px, 0.8fr) minmax(280px, 1.4fr);
+  gap: 16px 28px;
+  align-items: start;
+}
+
+.alternative-source-item strong,
+.alternative-source-item span {
+  display: block;
+}
+
+.alternative-source-item strong {
+  font-size: 0.84rem;
+}
+
+.alternative-source-item span,
+.alternative-source-item p {
+  color: var(--muted);
+  font-size: 0.7rem;
+  line-height: 1.5;
+}
+
+.alternative-source-item span {
+  margin-top: 4px;
+  font-weight: 750;
+}
+
+.alternative-source-item p {
+  margin: 0;
+}
+
+.alternative-source-note {
+  grid-column: 2;
+  margin-top: -10px !important;
+  color: var(--amber) !important;
+}
+
+.peek-source {
+  margin: 0 0 14px;
+  border-left: 2px solid var(--blue);
+  padding-left: 10px;
+  color: var(--muted);
+  font-size: 0.67rem;
+  line-height: 1.45;
+}
+
 .metric-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -1658,6 +1723,16 @@ input[type="range"] {
   .metric-grid,
   .method-grid {
     grid-template-columns: 1fr;
+  }
+
+  .alternative-source-item {
+    grid-template-columns: 1fr;
+    gap: 7px;
+  }
+
+  .alternative-source-note {
+    grid-column: 1;
+    margin-top: 0 !important;
   }
 
   .metric-grid-intro {

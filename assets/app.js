@@ -132,9 +132,9 @@
     $("#map-zoom-reset").addEventListener("click", resetMapView);
     els.mapSvg.addEventListener("wheel", handleMapWheel, { passive: false });
     els.mapSvg.addEventListener("pointerdown", startMapDrag);
-    els.mapSvg.addEventListener("pointermove", moveMapDrag);
-    els.mapSvg.addEventListener("pointerup", endMapDrag);
-    els.mapSvg.addEventListener("pointercancel", endMapDrag);
+    window.addEventListener("pointermove", moveMapDrag, { passive: false });
+    window.addEventListener("pointerup", endMapDrag);
+    window.addEventListener("pointercancel", endMapDrag);
 
     [$("#method-button"), $("#method-footer-button")].forEach((button) =>
       button.addEventListener("click", () => els.methodDialog.showModal()),
@@ -272,6 +272,7 @@
 
   function startMapDrag(event) {
     if (event.button !== 0 || state.mapView.width >= MAP_BOUNDS.width - 0.01) return;
+    event.preventDefault();
     state.mapDrag = {
       pointerId: event.pointerId,
       clientX: event.clientX,
@@ -286,6 +287,7 @@
 
   function moveMapDrag(event) {
     if (!state.mapDrag || event.pointerId !== state.mapDrag.pointerId) return;
+    event.preventDefault();
     const rect = els.mapSvg.getBoundingClientRect();
     const dx = ((event.clientX - state.mapDrag.clientX) / rect.width) * state.mapDrag.view.width;
     const dy = ((event.clientY - state.mapDrag.clientY) / rect.height) * state.mapDrag.view.height;
@@ -415,6 +417,9 @@
     const caution = isMapMetricUnstable(county)
       ? `<p class="peek-caution">This metric is marked unstable under the small-number rules. The estimate remains available in county detail.</p>`
       : "";
+    const sourceNote = county.alternativeSources?.length
+      ? `<p class="peek-source">Alternative source: ${escapeHtml(county.alternativeSources.map((source) => `${source.name} (${source.year})`).join("; "))}</p>`
+      : "";
     els.peek.innerHTML = `
       <div class="peek-topline"><span class="status-chip published">Published</span><span class="place-line">${county.geoid}</span></div>
       <h2>${escapeHtml(county.name)}</h2><p class="place-line">${county.state}</p>
@@ -426,6 +431,7 @@
         <div><span>Officers with usable data</span><strong>${formatPct(county.coverage)}</strong></div>
       </div>
       ${caution}
+      ${sourceNote}
       <a class="button primary" href="#county=${encodeURIComponent(county.geoid)}">Open county profile →</a>`;
   }
 
@@ -601,7 +607,7 @@
       smallNumberCautions.push({
         label: "Small real reported arrest count",
         pct: null,
-        description: `${formatArrestCount(county.originalRealArrests)} real reported arrests; at least 250 are required for a stable estimate. NIBRS counts are used for NIBRS-pathway agencies and ASR/SRS counts when the SRS pathway is used.`,
+        description: `${formatArrestCount(county.originalRealArrests)} arrests in the underlying reported data; at least 250 are required for a stable estimate. This uses NIBRS counts, ASR/SRS counts, or filtered Florida county-detention events according to the agency's source.`,
       });
     }
     if (county.raceCaution && !county.generalCaution) {
@@ -612,6 +618,18 @@
       });
     }
     const allCautions = [...smallNumberCautions, ...county.cautions];
+    const alternativeSourceSection = county.alternativeSources?.length
+      ? `<section class="alternative-source-panel panel">
+          <p class="eyebrow">Alternative arrest data used</p>
+          <div class="alternative-source-list">${county.alternativeSources.map(alternativeSourceHtml).join("")}</div>
+        </section>`
+      : "";
+    const countyLevelAlternative = county.alternativeSources?.some(
+      (source) => source.geography === "county",
+    );
+    const agencyDescription = countyLevelAlternative
+      ? "Agency rows reflect available national reporting data and will not sum to the county headline estimates, which use a county-level alternative source."
+      : "Arrest counts and officers are apportioned to this county. Agencies are ordered by estimated total arrests contributed here.";
     els.countyView.innerHTML = `
       <a class="back-link" href="#map">← Back to national map</a>
       <header class="county-hero">
@@ -622,6 +640,7 @@
         </div>
         <div class="coverage-gauge"><span>Share of officers at agencies with usable arrest data</span><strong>${formatPct(county.coverage)}</strong></div>
       </header>
+      ${alternativeSourceSection}
       <div class="metric-grid-intro">
         <p>Bars plot the estimated rate. Reference marks show the national 25th percentile, median, and 75th percentile among counties with stable values for each metric.</p>
       </div>
@@ -646,7 +665,7 @@
         </section>
       </div>
       <section class="agency-panel panel">
-        <div class="section-head"><div><p class="eyebrow">Agency contributions</p><h2>${number.format(countyAgencies.length)} apportioned agencies</h2></div><p>Arrest counts and officers are apportioned to this county. Agencies are ordered by estimated total arrests contributed here.</p></div>
+        <div class="section-head"><div><p class="eyebrow">Agency contributions</p><h2>${number.format(countyAgencies.length)} apportioned agencies</h2></div><p>${escapeHtml(agencyDescription)}</p></div>
         <div class="table-wrap">
           <table class="data-table agency-table">
             <thead><tr><th>Agency</th><th>% in county</th><th>Officers</th><th>Total</th><th>Low-level</th><th>All other</th><th>Black</th><th>Black low</th><th>NH White</th><th>NH White low</th><th>Hispanic</th><th>Hispanic low</th><th>Other NH</th><th>Other NH low</th></tr></thead>
@@ -654,6 +673,18 @@
           </table>
         </div>
       </section>`;
+  }
+
+  function alternativeSourceHtml(source) {
+    const geography = source.geography === "county" ? "County-level source" : "Agency-level source";
+    const note = source.note
+      ? `<p class="alternative-source-note"><strong>Source limitation:</strong> ${escapeHtml(source.note)}</p>`
+      : "";
+    return `<article class="alternative-source-item">
+      <div><strong>${escapeHtml(source.name)}</strong><span>${escapeHtml(String(source.year))} · ${geography}</span></div>
+      <p>${escapeHtml(source.description)}</p>
+      ${note}
+    </article>`;
   }
 
   function metricCardHtml(county, key, featured) {
@@ -744,13 +775,16 @@
   }
 
   function suppressedCountyHtml(county) {
+    const sourceNote = county.alternativeSources?.length
+      ? `<p>Available alternative source: ${escapeHtml(county.alternativeSources.map((source) => `${source.name} (${source.year})`).join("; "))}.</p>`
+      : "";
     return `
       <a class="back-link" href="#map">← Back to national map</a>
       <header class="county-hero">
         <div><p class="eyebrow">County profile · ${escapeHtml(county.geoid)}</p><h1>${escapeHtml(county.name)}</h1><div class="county-subline"><span>${county.state}</span><span>•</span><span>${formatNumber(county.population)} residents</span><span class="status-chip suppressed">Not published</span></div></div>
         <div class="coverage-gauge"><span>Share of officers at agencies with usable arrest data</span><strong style="color:var(--muted)">${formatPct(county.coverage)}</strong></div>
       </header>
-      <section class="suppressed-panel panel"><div><p class="eyebrow">Below the coverage standard</p><div class="coverage-big">${formatPct(county.coverage)}</div><h2>Metric values are withheld for this county.</h2><p>Agencies with usable real data account for less than 80% of the known officers serving the county. Agencies with fully estimated arrest totals do not count toward the threshold, and the county is not ranked or selectable from the ranking table.</p><a class="button secondary" href="#ranking">View county rankings</a></div></section>`;
+      <section class="suppressed-panel panel"><div><p class="eyebrow">Below the coverage standard</p><div class="coverage-big">${formatPct(county.coverage)}</div><h2>Metric values are withheld for this county.</h2><p>Agencies with usable real data account for less than 80% of the known officers serving the county. Agencies with fully estimated arrest totals do not count toward the threshold, and the county is not ranked or selectable from the ranking table.</p>${sourceNote}<a class="button secondary" href="#ranking">View county rankings</a></div></section>`;
   }
 
   function formatNumber(value) {

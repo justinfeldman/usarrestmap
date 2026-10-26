@@ -33,9 +33,10 @@ No build command is required.
 
 - Rates are reported per 100,000 residents.
 - Map colors, county comparisons, and ranking inputs use metric-specific stable counties as their percentile reference distributions. Unstable values are assigned percentiles against those stable distributions without influencing them.
-- Counties are suppressed and excluded from rankings when agencies with usable arrest data account for less than 80% of the known officers serving the county.
+- Counties are generally suppressed and excluded from rankings when agencies with usable arrest data account for less than 80% of the known officers serving the county. Validated statewide sources can support publication where national reporting is incomplete.
+- Florida estimates can use 2025 Criminal Justice Data Transparency agency records. Ten California counties use 2024 California DOJ OpenJustice county totals with a held-out-validated simple calibration to the site's 2025 definitions; county pages identify these sources and any known source limitations.
 - A non-sheriff agency is treated as having no usable arrest report when its underreporting-corrected count is below one arrest per full-time officer. It is then estimated with the same validated statistical procedure used for other nonreporting agencies.
-- Low-volume estimates remain available with a visible caution when a county has fewer than 250 real reported arrests. This uses NIBRS counts for NIBRS-pathway agencies and ASR/SRS counts when the SRS pathway is used; there is no minimum estimated-arrest rule.
+- Low-volume estimates remain available with a visible caution when a county has fewer than 250 arrests in the underlying reported data. This uses the applicable national, Florida, or California source; there is no minimum estimated-arrest rule.
 - Black and Black–White metrics also receive a caution when the county has fewer than 100 estimated Black arrests.
 - Black arrest counts use observed NIBRS race shares for agencies with credible race reporting and a validated statistical model elsewhere.
 - Population denominators use the 2020–2024 American Community Survey five-year estimates.
