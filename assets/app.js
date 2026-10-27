@@ -18,7 +18,7 @@
   });
   const MAP_BOUNDS = Object.freeze({ x: 0, y: 0, width: 1000, height: 620 });
   const MAX_MAP_ZOOM = 8;
-  const DATA_VERSION = "20261026-florida-directional";
+  const DATA_VERSION = "20261027-limited-policing";
 
   const state = {
     payload: null,
