@@ -614,7 +614,7 @@
       (source) => source.geography === "county" || source.countyHeadlineOverride,
     );
     const agencyDescription = countyLevelAlternative
-      ? "Agency rows retain the temporally modeled 2023–2025 average annual values and may not sum to the county headline, whose 2025 component uses an approved alternative source."
+      ? "Agency rows retain the temporally modeled 2023–2025 average annual values and may not sum to the county headline, whose selected annual component(s) use an approved alternative source."
       : "Average annual arrest counts and officers are apportioned to this county. Agencies are ordered by estimated total arrests contributed here.";
     els.countyView.innerHTML = `
       <a class="back-link" href="#map">← Back to national map</a>

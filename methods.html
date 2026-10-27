@@ -70,10 +70,10 @@
               <thead><tr><th>Source</th><th>Period used</th><th>Role</th></tr></thead>
               <tbody>
                 <tr><td>FBI NIBRS arrest records</td><td>2023–2025</td><td>Monthly custodial arrests, offense type, race, and ethnicity</td></tr>
-                <tr><td>FBI ASR/SRS</td><td>2025</td><td>Direct source for qualifying agencies, translated to NIBRS-equivalent definitions</td></tr>
+                <tr><td>FBI ASR/SRS</td><td>2023–2025</td><td>Direct source for qualifying agencies, translated to NIBRS-equivalent definitions</td></tr>
                 <tr><td>FBI Law Enforcement Employees and reviewed staffing sources</td><td>Through 2025</td><td>Preferred full-time sworn count and agency-year plausibility screen</td></tr>
-                <tr><td>Florida Criminal Justice Data Transparency</td><td>2025</td><td>Approved alternative for a county’s 2025 component</td></tr>
-                <tr><td>California DOJ OpenJustice</td><td>2024 source calibrated to 2025</td><td>Approved county-level alternative for selected California counties</td></tr>
+                <tr><td>Florida Criminal Justice Data Transparency</td><td>2023–2025</td><td>Selected agency-year alternative for otherwise imputed county components</td></tr>
+                <tr><td>California DOJ OpenJustice</td><td>2023–2025</td><td>Selected county-year alternative for otherwise imputed California components</td></tr>
                 <tr><td>American Community Survey and reviewed service geographies</td><td>Fixed 2025 analytical values</td><td>Population, covariates, denominators, and county allocation</td></tr>
               </tbody>
             </table></div>
@@ -89,7 +89,7 @@
           <section class="methods-section" id="credibility">
             <p class="eyebrow">05 · Reporter screening</p><h2>Credibility is decided separately for each agency-year</h2>
             <p>An agency-year must contain at least three months with a positive NIBRS arrest count. Police agency-years with a positive officer count must also reach one corrected arrest per full-time sworn officer. Sheriffs remain exempt from the ratio screen because patrol, jail, court, and civil-process responsibilities differ substantially.</p>
-            <p>A police agency-year below the ratio before correction is not discarded immediately. It enters the screening within-year fit and is retained if the corrected annual total reaches the threshold. Agency-years that still fail after correction are excluded from the final within-year fit and from every later imputation training set. Qualifying 2025 SRS agency-years receive the same police-versus-sheriff officer screen after their reporting-gap correction.</p>
+            <p>A police agency-year below the ratio before correction is not discarded immediately. It enters the screening within-year fit and is retained if the corrected annual total reaches the threshold. Agency-years that still fail after correction are excluded from the final within-year fit and from every later imputation training set. Qualifying SRS agency-years receive the same police-versus-sheriff officer screen after translation.</p>
           </section>
 
           <section class="methods-section" id="within-year">
@@ -103,6 +103,7 @@
           <section class="methods-section" id="missing-years">
             <p class="eyebrow">07 · Annual gaps</p><h2>TabPFN fills missing aggregate calendar years</h2>
             <p>After within-year correction and final credibility screening, each qualifying source supplies a complete agency-year total. For an agency with one or two direct years, TabPFN predicts each missing full calendar year. The training rows are direct agency-years; the query rows are missing agency-years.</p>
+            <p>For qualifying 2023–2024 SRS agency-years that lack NIBRS, annual TabPFN bridge models translate SRS totals and composition to the within-year-corrected NIBRS scale. The selected specification combines peer agencies with clean same-agency history when available and falls back to a source-only peer model otherwise. Bridge training is restricted to source/NIBRS overlaps below the 2× discrepancy threshold.</p>
             <p>Features include agency ID, state, agency type, primary county, calendar-year index, an agency-specific anchor derived from its direct years, and fixed 2025 population, location, race/ethnicity, poverty, and density covariates. Calendar-month features are not used because the target is an aggregate year. TabPFN runs on Apple MPS with one estimator.</p>
             <p>Separate models predict the log total, low-level share, Black share within low-level and all-other arrests, and coherent non-Hispanic White, Hispanic, and other non-Hispanic composition within both offense strata. This produces total, low-level, Black, non-Hispanic White, Hispanic, low-level Black, and low-level non-Hispanic White counts that reconcile exactly.</p>
           </section>
@@ -121,17 +122,17 @@
 
           <section class="methods-section" id="alternatives">
             <p class="eyebrow">10 · State alternatives</p><h2>Florida and California affect counties, not agency records</h2>
-            <p>Approved Florida CJDT agency estimates and California OpenJustice county estimates are retained where the new procedure would otherwise use a temporal estimate for the 2025 county component. The 2023 and 2024 components are unchanged, so an alternative changes the three-year average by one third of the difference between the alternative and temporal 2025 values.</p>
+            <p>Selected Florida CJDT agency-year estimates and California OpenJustice county-year estimates are retained only where the corresponding county-year would otherwise include temporal or fully missing-agency imputation. Each replaced annual component changes the three-year average by one third of the difference between the alternative and core value.</p>
             <p>Agency detail always retains the NIBRS/SRS plus temporal-model estimate. It is not overwritten by CJDT or by a synthetic allocation of the California county total. County pages identify the alternative source and warn that the agency rows may not sum to the county headline.</p>
-            <p>Florida CJDT records are reconstructed from charge-level detention data and translated to the custodial NIBRS definition using the previously validated procedure. California uses the previously selected simple calibration of OpenJustice county totals and composition; the source file is for 2024 and is used as the approved proxy for the 2025 county component.</p>
+            <p>Florida CJDT and NIBRS months first receive the same within-year correction. The selected Florida bridge predicts mean-centered monthly NIBRS counts from the corrected CJDT months, peer agencies, and clean same-agency NIBRS history; annual composition is modeled separately and reconciled to the predicted total. Training and production eligibility apply the below-2× source-discrepancy rule. California retains the standing practical county-level rule: annual OpenJustice values are translated with a peer-based source-only bridge for 2023–2024, while the previously approved 2025 proxy remains in place.</p>
           </section>
 
           <section class="methods-section" id="publication">
             <p class="eyebrow">11 · Quality thresholds</p><h2>County publication and stability</h2>
-            <p>The general publication threshold is 80% usable-data officer coverage. An agency contributes its fixed officer count to the numerator when it has at least one credible reporting year during 2023–2025; those values are allocated and summed within counties. An approved Florida source counts as a credible 2025 year. California’s approved county source can publish a county directly.</p>
+            <p>The general publication threshold is 80% usable-data officer coverage. An agency contributes its fixed officer count to the numerator when it has at least one credible reporting or selected Florida source year during 2023–2025; those values are allocated and summed within counties. California’s approved county source can publish a county directly.</p>
             <div class="methods-formula"><p>Coverage = Σ(officers at agencies with at least one credible year) ÷ Σ(officers)</p></div>
             <p>Publication and metric uncertainty are different. For each count numerator, a metric-specific NB2 dispersion is estimated from within-county variation across the three annual estimates. The variance of the three-year mean is the NB2 annual variance divided by three. The site reports an approximate 90% credible interval and a coefficient of variation for every metric.</p>
-            <p>A county metric is visually suppressed on the map when its coefficient of variation exceeds 30%. Its county profile still reports the estimate and interval with a high-uncertainty note. These process-noise intervals treat reporting corrections, source translation, temporal imputation, composition imputation, and alternative-source calibration as fixed; they do not incorporate those other sources of uncertainty.</p>
+            <p>A county metric is visually suppressed on the map when its coefficient of variation exceeds 30%. Its county profile still reports the estimate and interval with an unstable-estimate note. These process-noise intervals treat reporting corrections, source translation, temporal imputation, composition imputation, and alternative-source calibration as fixed; they do not incorporate those other sources of uncertainty.</p>
           </section>
 
           <section class="methods-section" id="rates">
@@ -149,8 +150,8 @@
               <li>The one-arrest-per-officer screen can reject a genuinely low-arrest police agency. It is a data-quality rule, not a judgment about performance.</li>
               <li>Agency existence, independence, service areas, staffing, population, and covariates are intentionally held at their current 2025 analytical values rather than reconstructed historically.</li>
               <li>SRS, Florida detention records, and California county data do not exactly match individual-level NIBRS. Calibration reduces but cannot remove those scope differences.</li>
-              <li>California’s 2024 source approximates the 2025 county component. The agency rows deliberately retain temporal estimates and therefore may not sum to an alternative-source county headline.</li>
-              <li>County-specific confidence intervals are not currently published. Coverage and stability flags are practical quality indicators, not complete uncertainty measures.</li>
+              <li>Agency rows deliberately retain temporal estimates where Florida or California replaces a county-year component and therefore may not sum to an alternative-source county headline.</li>
+              <li>County-specific intervals cover only estimated NB2 process noise. Coverage and stability flags are practical quality indicators, not complete uncertainty measures.</li>
               <li>Arrest rates reflect enforcement, laws, policy, resources, reporting practices, and community conditions; they are not direct measures of crime prevalence or causal agency performance.</li>
             </ul>
             <div class="methods-callout"><p class="eyebrow">Interpret with context</p><p>Use source notes, coverage, stability cautions, and agency-level detail alongside every county estimate.</p></div>
