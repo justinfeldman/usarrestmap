@@ -18,7 +18,7 @@
   });
   const MAP_BOUNDS = Object.freeze({ x: 0, y: 0, width: 1000, height: 620 });
   const MAX_MAP_ZOOM = 8;
-  const DATA_VERSION = "20261026-three-year-final";
+  const DATA_VERSION = "20261026-florida-directional";
 
   const state = {
     payload: null,
@@ -611,7 +611,7 @@
         </section>`
       : "";
     const countyLevelAlternative = county.alternativeSources?.some(
-      (source) => source.geography === "county" || source.countyHeadlineOverride,
+      (source) => source.geography === "county",
     );
     const agencyDescription = countyLevelAlternative
       ? "Agency rows retain the temporally modeled 2023–2025 average annual values and may not sum to the county headline, whose selected annual component(s) use an approved alternative source."
@@ -757,11 +757,18 @@
   }
 
   function agencyRowHtml(agency) {
-    const sourceNote = agency.directYears === 0
+    const sourceParts = [];
+    if (agency.directYears > 0) {
+      sourceParts.push(`${agency.directYears} direct NIBRS/SRS ${agency.directYears === 1 ? "year" : "years"}`);
+    }
+    if (agency.alternativeYears > 0) {
+      sourceParts.push(`${agency.alternativeYears} Florida alternative ${agency.alternativeYears === 1 ? "year" : "years"}`);
+    }
+    const sourceNote = agency.usableSourceYears === 0
       ? " · fully imputed 3-year average"
-      : agency.temporalImputation
-        ? ` · ${agency.directYears}/3 direct years; missing years imputed`
-        : " · 3/3 direct years";
+      : agency.usableSourceYears < 3
+        ? ` · ${sourceParts.join(" + ")}; remaining years imputed`
+        : ` · ${sourceParts.join(" + ")}`;
     return `<tr>
       <td class="agency-name"><strong>${escapeHtml(agency.name || agency.ori)}</strong><small>${escapeHtml(agency.ori)} · ${escapeHtml(agency.type || "Agency")}${sourceNote}</small></td>
       <td>${formatPct(agency.allocationPct)}</td><td>${formatNumber(agency.officers)}</td>

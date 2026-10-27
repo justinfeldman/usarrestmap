@@ -6,7 +6,7 @@
     <meta name="description" content="Methods for the 2023–2025 average annual county arrest estimates." />
     <meta name="theme-color" content="#0a0c11" />
     <title>Methods · County Arrest Estimates</title>
-    <link rel="stylesheet" href="assets/styles.css?v=20261026-three-year" />
+    <link rel="stylesheet" href="assets/styles.css?v=20261026-florida-directional" />
   </head>
   <body>
     <a class="skip-link" href="#main">Skip to content</a>
@@ -19,7 +19,7 @@
         <a href="./#map">Map</a><a href="./#ranking">Rankings</a>
         <a class="active" href="methods.html" aria-current="page">Methods</a>
       </nav>
-      <a class="method-button" href="data/county-metrics.csv?v=20261026-three-year" download>Download data</a>
+      <a class="method-button" href="data/county-metrics.csv?v=20261026-florida-directional" download>Download data</a>
     </header>
 
     <main class="methods-main" id="main">
@@ -72,7 +72,7 @@
                 <tr><td>FBI NIBRS arrest records</td><td>2023–2025</td><td>Monthly custodial arrests, offense type, race, and ethnicity</td></tr>
                 <tr><td>FBI ASR/SRS</td><td>2023–2025</td><td>Direct source for qualifying agencies, translated to NIBRS-equivalent definitions</td></tr>
                 <tr><td>FBI Law Enforcement Employees and reviewed staffing sources</td><td>Through 2025</td><td>Preferred full-time sworn count and agency-year plausibility screen</td></tr>
-                <tr><td>Florida Criminal Justice Data Transparency</td><td>2023–2025</td><td>Selected agency-year alternative for otherwise imputed county components</td></tr>
+                <tr><td>Florida Criminal Justice Data Transparency</td><td>2023–2025</td><td>Agency-year alternative for missing national data or NIBRS totals rejected by the directional discrepancy screen</td></tr>
                 <tr><td>California DOJ OpenJustice</td><td>2023–2025</td><td>Selected county-year alternative for otherwise imputed California components</td></tr>
                 <tr><td>American Community Survey and reviewed service geographies</td><td>Fixed 2025 analytical values</td><td>Population, covariates, denominators, and county allocation</td></tr>
               </tbody>
@@ -121,10 +121,10 @@
           </section>
 
           <section class="methods-section" id="alternatives">
-            <p class="eyebrow">10 · State alternatives</p><h2>Florida and California affect counties, not agency records</h2>
-            <p>Selected Florida CJDT agency-year estimates and California OpenJustice county-year estimates are retained only where the corresponding county-year would otherwise include temporal or fully missing-agency imputation. Each replaced annual component changes the three-year average by one third of the difference between the alternative and core value.</p>
-            <p>Agency detail always retains the NIBRS/SRS plus temporal-model estimate. It is not overwritten by CJDT or by a synthetic allocation of the California county total. County pages identify the alternative source and warn that the agency rows may not sum to the county headline.</p>
-            <p>Florida CJDT and NIBRS months first receive the same within-year correction. The selected Florida bridge predicts mean-centered monthly NIBRS counts from the corrected CJDT months, peer agencies, and clean same-agency NIBRS history; annual composition is modeled separately and reconciled to the predicted total. Training and production eligibility apply the below-2× source-discrepancy rule. California retains the standing practical county-level rule: annual OpenJustice values are translated with a peer-based source-only bridge for 2023–2024, while the previously approved 2025 proxy remains in place.</p>
+            <p class="eyebrow">10 · State alternatives</p><h2>Florida and California fill gaps—and Florida can disqualify a NIBRS year</h2>
+            <p>Selected Florida CJDT agency-year estimates replace national estimates when an agency-year would otherwise be temporally or fully imputed. They also replace a directly reported NIBRS agency-year when the corrected CJDT total is at least twice the corrected NIBRS total. This directional rule treats the much larger statewide count as evidence of major NIBRS underreporting; a discrepancy in the opposite direction does not by itself disqualify NIBRS. California OpenJustice county-year estimates replace county components that would otherwise include imputation. Each replaced annual component changes the three-year average by one third of the difference between the alternative and core value.</p>
+            <p>Florida agency detail is reconciled to the selected CJDT-based values and therefore sums to the county headline after county apportionment. California remains a county-level source, so no synthetic agency allocation is made; county pages identify that source and warn that agency rows may not sum to a California alternative-source headline.</p>
+            <p>Florida CJDT and NIBRS months first receive the same within-year correction. When clean same-agency NIBRS history is available, the Florida bridge predicts mean-centered monthly NIBRS counts from corrected CJDT months, peer agencies, and that history. Otherwise, an annual source-only TabPFN model translates the corrected CJDT record using clean peer overlaps. Annual composition is modeled separately and reconciled to the selected total. TabPFN is a pretrained tabular prediction model that adapts to the supplied training table without conventional task-specific neural-network training. Overlap rows with a twofold or larger discrepancy in either direction are excluded from bridge training. California annual values are translated for all three years with a peer-based source-only TabPFN bridge.</p>
           </section>
 
           <section class="methods-section" id="publication">
@@ -150,7 +150,7 @@
               <li>The one-arrest-per-officer screen can reject a genuinely low-arrest police agency. It is a data-quality rule, not a judgment about performance.</li>
               <li>Agency existence, independence, service areas, staffing, population, and covariates are intentionally held at their current 2025 analytical values rather than reconstructed historically.</li>
               <li>SRS, Florida detention records, and California county data do not exactly match individual-level NIBRS. Calibration reduces but cannot remove those scope differences.</li>
-              <li>Agency rows deliberately retain temporal estimates where Florida or California replaces a county-year component and therefore may not sum to an alternative-source county headline.</li>
+              <li>Florida agency rows reflect selected CJDT replacements. California is available only at county level, so agency rows may not sum to a California alternative-source county headline.</li>
               <li>County-specific intervals cover only estimated NB2 process noise. Coverage and stability flags are practical quality indicators, not complete uncertainty measures.</li>
               <li>Arrest rates reflect enforcement, laws, policy, resources, reporting practices, and community conditions; they are not direct measures of crime prevalence or causal agency performance.</li>
             </ul>
@@ -163,7 +163,7 @@
 
     <footer class="site-footer">
       <p>2023–2025 average annual county arrest estimates · Fixed 2025 population denominators</p>
-      <div class="footer-actions"><a class="text-button" href="./#map">Explore the map</a><a class="text-button" href="./#ranking">View rankings</a><a class="text-button" href="data/county-metrics.csv?v=20261026-three-year" download>Download county CSV</a></div>
+      <div class="footer-actions"><a class="text-button" href="./#map">Explore the map</a><a class="text-button" href="./#ranking">View rankings</a><a class="text-button" href="data/county-metrics.csv?v=20261026-florida-directional" download>Download county CSV</a></div>
     </footer>
   </body>
 </html>
